@@ -399,8 +399,12 @@ def main():
     skip = True # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
 
     PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED = checkParams(test)  
-    if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare'
-    elif platform.system() == 'Linux': CC_BIN = 'org.cloudcompare.CloudCompare'
+    if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare' #default installation directory
+    elif platform.system() == 'Linux': CC_BIN = os.popen('which cloudcompare').read()
+
+    if CC_BIN == '': 
+        print('CloudCompare Binary not found')
+        quit()
 
     OUTPUT = {'cc' : '/CC_Output.laz', 
             'py4d' : '/Py4dGeo_Output.laz', 
