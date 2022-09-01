@@ -41,7 +41,7 @@
 <li><a class="reference internal" href="#">src package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-src.compareCC_Py4d">src.compareCC_Py4d module</a></li>
-<li><a class="reference internal" href="#module-src.helper">src.helper module</a></li>
+<li><a class="reference internal" href="#module-src.file_handle">src.file_handle module</a></li>
 <li><a class="reference internal" href="#module-src.map_diff">src.map_diff module</a></li>
 <li><a class="reference internal" href="#module-src.py4d_m3c2">src.py4d_m3c2 module</a></li>
 <li><a class="reference internal" href="#module-src.vec_calc">src.vec_calc module</a></li>
@@ -83,7 +83,7 @@
 <span id="src-comparecc-py4d-module"></span><h2>src.compareCC_Py4d module<a class="headerlink" href="#module-src.compareCC_Py4d" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="src.compareCC_Py4d.Compare">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">re_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_spread1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_spread2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_spread1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_spread2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_normals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">re_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class for comparing the outputs of the m3c2-algorithm between CloudCompare and Py4dGeo</p>
 <dl class="py attribute">
@@ -189,7 +189,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotNormDiff">
 <span class="sig-name descname"><span class="pre">plotNormDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotNormDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotNormDiff" title="Permalink to this definition"></a></dt>
-<dd><p>Draw the normal differences between both point clouds on a polar plot by using matplotlib:</p>
+<dd><p>Draw the normal differences between both point clouds on a polar plot by using matplotlib.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -201,15 +201,58 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotSpreadDiff">
-<span class="sig-name descname"><span class="pre">plotSpreadDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotSpreadDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotSpreadDiff" title="Permalink to this definition"></a></dt>
-<dd><p>Plot differences between standard deviation spread1/spread2 between both point clouds.</p>
+<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotSampleDiff">
+<span class="sig-name descname"><span class="pre">plotSampleDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotSampleDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotSampleDiff" title="Permalink to this definition"></a></dt>
+<dd><p>Plot point density differences between both point clouds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The output path for the spread plot.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotSpreadDiff">
+<span class="sig-name descname"><span class="pre">plotSpreadDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotSpreadDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotSpreadDiff" title="Permalink to this definition"></a></dt>
+<dd><p>Plot standard deviation differences between both point clouds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – The output path for the spread plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.reorder_list">
+<span class="sig-name descname"><span class="pre">reorder_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">li</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.reorder_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.reorder_list" title="Permalink to this definition"></a></dt>
+<dd><p>Reorder a list by columns instead of rows.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.sigDiff">
+<span class="sig-name descname"><span class="pre">sigDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'false'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.sigDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.sigDiff" title="Permalink to this definition"></a></dt>
+<dd><p>Determine if the difference between two values is significant or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>val1</strong> (<em>float</em>) – The first value.</p></li>
+<li><p><strong>val2</strong> (<em>float</em>) – The second value.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – (optional) Sets the index in an array/list.</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – (optional) Sets the number of decimal places which are included. The default value is 20</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The significant difference.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -276,32 +319,38 @@
 <dd><p>Main part of the programm. Will only be executed when the file is executed directly from the command line, not by implementing it in another package.</p>
 </dd></dl>
 
-</section>
-<section id="module-src.helper">
-<span id="src-helper-module"></span><h2>src.helper module<a class="headerlink" href="#module-src.helper" title="Permalink to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="src.helper.get_xyz">
-<span class="sig-prename descclassname"><span class="pre">src.helper.</span></span><span class="sig-name descname"><span class="pre">get_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">li</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'false'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/helper.html#get_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.helper.get_xyz" title="Permalink to this definition"></a></dt>
-<dd><p>Return xyz coordinates from a triple or an array/list of triples.</p>
+<dt class="sig sig-object py" id="src.compareCC_Py4d.reorder">
+<span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">reorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cloud</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spread_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_set</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#reorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.reorder" title="Permalink to this definition"></a></dt>
+<dd><p>Rearrange certain parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>li</strong> (<em>list/triple</em>) – The input list/triple.</p></li>
-<li><p><strong>i</strong> – (optional) Sets the index in an array/list.</p></li>
+<li><p><strong>cloud</strong> (<em>numpy.ndarray</em>) – All the parameters of a the point cloud.</p></li>
+<li><p><strong>spread_set</strong> (<em>bool</em>) – Are spread informations provided.</p></li>
+<li><p><strong>sample_set</strong> (<em>bool</em>) – Are num_sample informations provided.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The reordered coordinates.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p>numpy.ndarray – The normals of the cloud.</p></li>
+<li><p>numpy.ndarray – The spread information.</p></li>
+<li><p>numpy.ndarray – The num_sample information.</p></li>
+</ul>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list/triple</p>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="module-src.file_handle">
+<span id="src-file-handle-module"></span><h2>src.file_handle module<a class="headerlink" href="#module-src.file_handle" title="Permalink to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="src.helper.read_las">
-<span class="sig-prename descclassname"><span class="pre">src.helper.</span></span><span class="sig-name descname"><span class="pre">read_las</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointcloudfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useevery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/helper.html#read_las"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.helper.read_las" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.file_handle.read_las">
+<span class="sig-prename descclassname"><span class="pre">src.file_handle.</span></span><span class="sig-name descname"><span class="pre">read_las</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointcloudfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useevery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/file_handle.html#read_las"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.file_handle.read_las" title="Permalink to this definition"></a></dt>
 <dd><p>Read a pointcloud from a las/laz file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -321,66 +370,37 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="src.helper.reorder_list">
-<span class="sig-prename descclassname"><span class="pre">src.helper.</span></span><span class="sig-name descname"><span class="pre">reorder_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">li</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/helper.html#reorder_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.helper.reorder_list" title="Permalink to this definition"></a></dt>
-<dd><p>Reorder a list by columns instead of rows.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>li</strong> (<em>list</em>) – The input list.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The reordered list</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="src.file_handle.read_xyz">
+<span class="sig-prename descclassname"><span class="pre">src.file_handle.</span></span><span class="sig-name descname"><span class="pre">read_xyz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/file_handle.html#read_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.file_handle.read_xyz" title="Permalink to this definition"></a></dt>
+<dd><p>Read a pointcloud from a las/laz file.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="src.helper.sigDiff">
-<span class="sig-prename descclassname"><span class="pre">src.helper.</span></span><span class="sig-name descname"><span class="pre">sigDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'false'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/helper.html#sigDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.helper.sigDiff" title="Permalink to this definition"></a></dt>
-<dd><p>Determine if the difference between two values is significant or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>val1</strong> (<em>float</em>) – The first value.</p></li>
-<li><p><strong>val2</strong> (<em>float</em>) – The second value.</p></li>
-<li><p><strong>i</strong> (<em>int</em>) – (optional) Sets the index in an array/list.</p></li>
-<li><p><strong>r</strong> (<em>int</em>) – (optional) Sets the number of decimal places which are included. The default value is 20</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The significant difference.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src.helper.write_las">
-<span class="sig-prename descclassname"><span class="pre">src.helper.</span></span><span class="sig-name descname"><span class="pre">write_las</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outpoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfilepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/helper.html#write_las"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.helper.write_las" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.file_handle.write_las">
+<span class="sig-prename descclassname"><span class="pre">src.file_handle.</span></span><span class="sig-name descname"><span class="pre">write_las</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/file_handle.html#write_las"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.file_handle.write_las" title="Permalink to this definition"></a></dt>
 <dd><p>Write a point cloud to a las/laz file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>outpoints</strong> (<em>numpy.array</em>) – 3D array of points to be written to output file</p></li>
-<li><p><strong>outfilepath</strong> (<em>str</em>) – specification of output file</p></li>
-<li><p><strong>attribute_dict</strong> (<em>dict</em>) – dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in ‘outpoints’); if not specified, dictionary is empty and nothing is added</p></li>
+<li><p><strong>points</strong> (<em>numpy.array</em>) – 3D array of points to be written to output file</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – specification of output file</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em>) – dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in ‘outpoints’); if not specified, dictionary is empty and nothing is added</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="src.helper.xyz_to_las">
-<span class="sig-prename descclassname"><span class="pre">src.helper.</span></span><span class="sig-name descname"><span class="pre">xyz_to_las</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/helper.html#xyz_to_las"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.helper.xyz_to_las" title="Permalink to this definition"></a></dt>
-<dd><p>Get the Numsamples from CC. CC has no option available to directly save Numsamples/Npoints to a las file, but to an ascii file. The CC output needs to be saved in an xyz file, which then gets translated to las.</p>
+<dt class="sig sig-object py" id="src.file_handle.write_xyz">
+<span class="sig-prename descclassname"><span class="pre">src.file_handle.</span></span><span class="sig-name descname"><span class="pre">write_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/file_handle.html#write_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.file_handle.write_xyz" title="Permalink to this definition"></a></dt>
+<dd><p>Write a point cloud to a las/laz file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the xyz file.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>numpy.array</em>) – 3D array of points to be written to output file</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – specification of output file</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em>) – dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in ‘outpoints’); if not specified, dictionary is empty and nothing is added</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -441,7 +461,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.map_diff.Map_Diff.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/map_diff.html#Map_Diff.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.map_diff.Map_Diff.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/map_diff.html#Map_Diff.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.map_diff.Map_Diff.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Draw the coordinates in the plot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -449,6 +469,7 @@
 <li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – The Axes.</p></li>
 <li><p><strong>max</strong> (<em>float</em>) – The maximum of the mapped values.</p></li>
+<li><p><strong>min</strong> (<em>float</em>) – The minimum of the mapped values.</p></li>
 <li><p><strong>proj</strong> (<em>str</em>) – Specifies if the plot is 2d or 3d.</p></li>
 </ul>
 </dd>
@@ -457,14 +478,18 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.map_diff.Map_Diff.subplot">
-<span class="sig-name descname"><span class="pre">subplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ttl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/map_diff.html#Map_Diff.subplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.map_diff.Map_Diff.subplot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ttl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/map_diff.html#Map_Diff.subplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.map_diff.Map_Diff.subplot" title="Permalink to this definition"></a></dt>
 <dd><p>Draw given coordinates in a Subplot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>vals</strong> (<em>numpy.ndarray</em>) – The values to be plotted as colors</p></li>
+<li><p><strong>crds</strong> (<em>numpy.ndarray</em>) – The points to be plotted.</p></li>
+<li><p><strong>ttl</strong> (<em>str</em>) – The title of the subplot.</p></li>
 <li><p><strong>ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – The Axes.</p></li>
 <li><p><strong>max</strong> (<em>float</em>) – The maximum of the mapped values.</p></li>
+<li><p><strong>min</strong> (<em>float</em>) – The minimum of the mapped values.</p></li>
 <li><p><strong>proj</strong> (<em>str</em>) – Specifies if the plot is 2d or 3d.</p></li>
 </ul>
 </dd>
@@ -542,7 +567,7 @@
 <li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path1</strong> (<em>str</em>) – The output path for the distance plot.</p></li>
 <li><p><strong>path2</strong> (<em>str</em>) – The output path for the lodetection plot.</p></li>
-<li><p><strong>dimension</strong> (<em>bool</em>) – Specifies whether the plot is plotted in 2d(True) or 3d(False).</p></li>
+<li><p><strong>proj</strong> (<em>bool</em>) – Specifies whether the plot is plotted in 2d(True) or 3d(False).</p></li>
 </ul>
 </dd>
 </dl>
@@ -550,7 +575,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parse_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read" title="Permalink to this definition"></a></dt>
 <dd><p>Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -563,15 +588,15 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.read_params">
-<span class="sig-name descname"><span class="pre">read_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read_params" title="Permalink to this definition"></a></dt>
-<dd><p>Read the needed parameters from a given file out and saves them to a dictionary.</p>
+<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.read_cc_params">
+<span class="sig-name descname"><span class="pre">read_cc_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read_cc_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read_cc_params" title="Permalink to this definition"></a></dt>
+<dd><p>Read the required parameters from a given file out and store them in a dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A dictionary containing the needed parameters for the m3c2-algorithm.</p>
+<dd class="field-even"><p>A dictionary containing the required parameters for the m3c2-algorithm.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dict</p>
@@ -580,8 +605,22 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.setup">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.setup" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.read_with_magic">
+<span class="sig-name descname"><span class="pre">read_with_magic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parse_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read_with_magic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read_with_magic" title="Permalink to this definition"></a></dt>
+<dd><p>Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p></li>
+<li><p><strong>*path</strong> (<em>str</em>) – The path to a point cloud file. Can also handle multiple files.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.run" title="Permalink to this definition"></a></dt>
 <dd><p>Main function for calculating the distances. Implements the m3c2-algorithm from the py4dgeo library.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -598,33 +637,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.write" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.write" title="Permalink to this definition"></a></dt>
 <dd><p>Handle writing to different filetypes(ascii and las/laz), so theres no need to change the function when using a different file extension.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.write_to_las">
-<span class="sig-name descname"><span class="pre">write_to_las</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.write_to_las"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.write_to_las" title="Permalink to this definition"></a></dt>
-<dd><p>Write a point cloud (coordinates) with additional parameters to a las/laz file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.write_to_xyz">
-<span class="sig-name descname"><span class="pre">write_to_xyz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.write_to_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.write_to_xyz" title="Permalink to this definition"></a></dt>
-<dd><p>Write a point cloud (coordinates) with additional parameters to an ascii file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p></li>
+<li><p><strong>cc_mode</strong> (<em>bool</em>) – Specifies if the header is written with CC vocabulary or py4dgeo vocabulary.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

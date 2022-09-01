@@ -1,10 +1,10 @@
-.. CompareCC_Py4dGeo documentation master file, created by
-   sphinx-quickstart on Wed Aug 24 17:52:10 2022.
+.. Compare_Py4dGeo_CC documentation master file, created by
+   sphinx-quickstart on Thu Sep  1 13:26:54 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CompareCC_Py4dGeo's documentation!
-=============================================
+Welcome to Compare_Py4dGeo_CC's documentation!
+==============================================
 
 .. toctree::
    :maxdepth: 2

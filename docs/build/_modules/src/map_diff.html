@@ -65,7 +65,6 @@
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">ticker</span>
-<span class="kn">import</span> <span class="nn">helper</span> <span class="k">as</span> <span class="nn">hlp</span>
 
 <div class="viewcode-block" id="Map_Diff"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff">[docs]</a><span class="k">class</span> <span class="nc">Map_Diff</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -96,22 +95,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="n">unit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_size</span> <span class="o">=</span> <span class="mi">5</span>
 
-<div class="viewcode-block" id="Map_Diff.subplot"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff.subplot">[docs]</a>    <span class="k">def</span> <span class="nf">subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">crds</span><span class="p">,</span> <span class="n">ttl</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Map_Diff.subplot"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff.subplot">[docs]</a>    <span class="k">def</span> <span class="nf">subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">crds</span><span class="p">,</span> <span class="n">ttl</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Draw given coordinates in a Subplot.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            self (Compare): The object itself.</span>
+<span class="sd">            vals (numpy.ndarray): The values to be plotted as colors</span>
+<span class="sd">            crds (numpy.ndarray): The points to be plotted. </span>
+<span class="sd">            ttl (str): The title of the subplot.</span>
 <span class="sd">            ax (matplotlib.axes._subplots.AxesSubplot): The Axes.</span>
 <span class="sd">            max (float): The maximum of the mapped values.</span>
+<span class="sd">            min (float): The minimum of the mapped values. </span>
 <span class="sd">            proj (str): Specifies if the plot is 2d or 3d.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X Axis&#39;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y Axis&#39;</span><span class="p">)</span>
 
-        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="n">hlp</span><span class="o">.</span><span class="n">reorder_list</span><span class="p">(</span><span class="n">crds</span><span class="p">)</span> <span class="c1">#returns X,Y,Z coordinates</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="n">crds</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span><span class="mi">2</span><span class="p">]</span> <span class="c1">#returns X,Y,Z coordinates</span>
 
-        <span class="n">pointColors</span> <span class="o">=</span> <span class="n">vals</span><span class="o">/</span><span class="nb">max</span>
+        <span class="n">pointColors</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span><span class="o">/</span><span class="nb">max</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="n">ttl</span><span class="p">)</span>    
 
@@ -122,7 +125,7 @@
             <span class="c1">#draw points</span>
             <span class="n">pts</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">point_size</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">pointColors</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlGnBu&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">proj</span><span class="o">==</span><span class="s1">&#39;3d&#39;</span><span class="p">:</span>
-            <span class="c1">##set viewport </span>
+            <span class="c1">#set viewport </span>
             <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">112</span><span class="p">)</span> 
 
             <span class="c1"># set x, y and z scale equal</span>
@@ -139,7 +142,7 @@
 
         <span class="k">return</span> <span class="n">pts</span></div>
 
-<div class="viewcode-block" id="Map_Diff.plot"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Map_Diff.plot"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Draw the coordinates in the plot</span>
 
@@ -147,13 +150,14 @@
 <span class="sd">            self (Compare): The object itself.</span>
 <span class="sd">            ax (matplotlib.axes._subplots.AxesSubplot): The Axes.</span>
 <span class="sd">            max (float): The maximum of the mapped values.</span>
+<span class="sd">            min (float): The minimum of the mapped values. </span>
 <span class="sd">            proj (str): Specifies if the plot is 2d or 3d.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X Axis&#39;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y Axis&#39;</span><span class="p">)</span>
-        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="n">hlp</span><span class="o">.</span><span class="n">reorder_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="c1">#returns X,Y,Z coordinates</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">:,</span><span class="mi">2</span><span class="p">]</span> <span class="c1">#returns X,Y,Z coordinates</span>
 
-        <span class="n">pointColors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapped_vals</span><span class="o">/</span><span class="nb">max</span>
+        <span class="n">pointColors</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_vals</span><span class="p">)</span><span class="o">/</span><span class="nb">max</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 
@@ -164,7 +168,7 @@
             <span class="c1">#draw points</span>
             <span class="n">pts</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">point_size</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">pointColors</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;YlGnBu&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">proj</span><span class="o">==</span><span class="s1">&#39;3d&#39;</span><span class="p">:</span>
-            <span class="c1">##set viewport </span>
+            <span class="c1">#set viewport </span>
             <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">112</span><span class="p">)</span> 
 
             <span class="c1"># set x, y and z scale equal</span>
@@ -195,15 +199,16 @@
 
         <span class="c1">#get max distances</span>
         <span class="nb">max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_vals</span><span class="p">)</span>
+        <span class="nb">min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_vals</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X Axis&#39;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y Axis&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">proj</span><span class="o">==</span><span class="s1">&#39;2d&#39;</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span> <span class="c1">#rotate x-ticklabels to prevent overlapping</span>
-            <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="s1">&#39;2d&#39;</span><span class="p">)</span>
+            <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="s1">&#39;2d&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">proj</span><span class="o">==</span><span class="s1">&#39;3d&#39;</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Z Axis&#39;</span><span class="p">)</span>
-            <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+            <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="s1">&#39;3d&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span> 
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not a valid projection&#39;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -239,17 +244,24 @@
         <span class="c1">#get max value of all mapped values to determine maximum of colorbar</span>
         <span class="n">highest</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="nb">max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_vals</span><span class="p">)</span>
+        <span class="nb">min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapped_vals</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
             <span class="n">new_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">new_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">new_max</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">:</span> 
                 <span class="nb">max</span> <span class="o">=</span> <span class="n">new_max</span>
                 <span class="n">highest</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-
+            <span class="k">if</span> <span class="n">new_min</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">:</span>
+                <span class="nb">min</span> <span class="o">=</span> <span class="n">new_min</span>
+        <span class="k">if</span> <span class="nb">min</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">min</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># create subplots</span>
         <span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">dim</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-        <span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>
+        <span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dim</span><span class="p">):</span>
-            <span class="n">pts</span><span class="p">[</span><span class="n">pt</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">pt</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="n">pt</span><span class="p">],</span> <span class="n">ttls</span><span class="p">[</span><span class="n">pt</span><span class="p">],</span> <span class="n">ax</span><span class="p">[</span><span class="n">pt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>
+            <span class="n">pts</span><span class="p">[</span><span class="n">pt</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="n">pt</span><span class="p">],</span> <span class="n">crds</span><span class="p">[</span><span class="n">pt</span><span class="p">],</span> <span class="n">ttls</span><span class="p">[</span><span class="n">pt</span><span class="p">],</span> <span class="n">ax</span><span class="p">[</span><span class="n">pt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>
+
+        <span class="c1"># set minimum of colorbar</span>
+        <span class="n">pts</span><span class="p">[</span><span class="n">highest</span><span class="p">]</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="nb">min</span><span class="p">)</span>
         
         <span class="c1">#set color bar with individual ticks and labels</span>
         <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">highest</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>

@@ -12,10 +12,10 @@ src.compareCC\_Py4d module
    :undoc-members:
    :show-inheritance:
 
-src.helper module
------------------
+src.file\_handle module
+-----------------------
 
-.. automodule:: src.helper
+.. automodule:: src.file_handle
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,5 +1,5 @@
-Compare_Py4d_CC
-===============
+Compare_Py4dGeo_CC
+==================
 
 .. toctree::
    :maxdepth: 4

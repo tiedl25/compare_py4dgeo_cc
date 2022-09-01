@@ -51,11 +51,10 @@ def write_las(points, path, attributes={}):
     Write a point cloud to a las/laz file
 
     Parameters:
-        outpoints (numpy.array): 3D array of points to be written to output file
-        outfilepath (str): specification of output file
-        attribute_dict (dict): dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in 'outpoints'); if not specified, dictionary is empty and nothing is added
+        points (numpy.array): 3D array of points to be written to output file
+        path (str): specification of output file
+        attributes (dict): dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in 'outpoints'); if not specified, dictionary is empty and nothing is added
     '''
-
     hdr = laspy.LasHeader(version="1.4", point_format=6)
 
     las = laspy.LasData(hdr)
@@ -76,9 +75,18 @@ def write_las(points, path, attributes={}):
     las.write(path)
 
 def read_xyz():
+    '''Read a pointcloud from a las/laz file.'''
     pass
 
 def write_xyz(points, path, attributes={}):
+    '''
+    Write a point cloud to a las/laz file
+
+    Parameters:
+        points (numpy.array): 3D array of points to be written to output file
+        path (str): specification of output file
+        attributes (dict): dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in 'outpoints'); if not specified, dictionary is empty and nothing is added
+    '''
     with open(path, mode='w') as file:
         file.write('//X Y Z ')
         for s in attributes.keys(): file.write(s + ' ')

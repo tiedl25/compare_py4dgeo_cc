@@ -35,13 +35,13 @@ class Compare:
             re_dist (numpy.ndarray): the m3c2-distances of the reference point cloud
             re_lod (numpy.ndarray): the level-of-detection of the reference point cloud
             re_spread (list): the standard deviation of distances of the reference point cloud
-            re_samples (list):
+            re_samples (list): the total number of points taken into consideration in either cloud 
             re_normals (numpy.ndarray): the normal-coordinates of the reference point cloud
             cl_pts (numpy.ndarray): the xyz-coordinates of the py4dgeo point cloud
             cl_dist (numpy.ndarray): the m3c2-distances of the py4dgeo point cloud
             cl_lod (numpy.ndarray): the level-of-detection of the py4dgeo point cloud
             cl_spread (list): the standard deviation of distances of the py4dgeo point cloudy
-            cl_samples (list):
+            cl_samples (list): the total number of points taken into consideration in either cloud 
             cl_normals (numpy.ndarray): the normal-coordinates of the py4dgeo point cloudy)
         '''
         self.re = {'pts': re_pts, 'dist' : re_dist, 'lod' : re_lod, 'normals' : re_normals}
@@ -80,6 +80,7 @@ class Compare:
         Determine if the difference between two values is significant or not.
 
         Parameters:
+            self (Compare): The object itself.
             val1 (float): The first value.
             val2 (float): The second value.
             i (int): (optional) Sets the index in an array/list.
@@ -161,7 +162,7 @@ class Compare:
 
     def plotNormDiff(self, path):
         '''
-        Draw the normal differences between both point clouds on a polar plot by using matplotlib:
+        Draw the normal differences between both point clouds on a polar plot by using matplotlib.
 
         Parameters:
             self (Compare): The object itself.
@@ -360,6 +361,20 @@ def checkParams(skip):
     else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False
 
 def reorder(cloud, spread_set, sample_set):
+    '''
+    Rearrange certain parameters.
+
+    Parameters:
+        cloud (numpy.ndarray): All the parameters of a the point cloud.
+        spread_set (bool): Are spread informations provided.
+        sample_set (bool): Are num_sample informations provided.
+
+    Returns:
+        tuple:
+            - numpy.ndarray -- The normals of the cloud.
+            - numpy.ndarray -- The spread information. 
+            - numpy.ndarray -- The num_sample information.
+    '''
     cl_normals = np.array([cloud[1]['NormalX'], cloud[1]['NormalY'], cloud[1]['NormalZ']])
     cl_normals = np.transpose(cl_normals)
 

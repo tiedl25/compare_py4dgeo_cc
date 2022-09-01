@@ -25,10 +25,10 @@ class Py4d_M3C2:
             self (Py4d_M3C2): The object itself.
             path1 (str): The path to the first point cloud file.
             path2 (str): The path to the second point cloud file.
-            corepoint_path (str): (optional) The path to a corepoint file. If not provided, the first point cloud is used instead.
-            output_path (str): (optional) The name and path for the output file. If not provided, the output won't be saved.
-            params (dict/str): (optional) Either the path to a CC params file or a dictionary featuring the keys: 'cyl_radii', normal_radii', 'max_distance' and 'registration_error'. If not provided default parameters are set.
-            compr: (optional) A compression rate for the corepoints if no corepoint file is given. That means only every n-th point is used. Default value is 1, so no compression at all.
+            corepoint_path (str/bool): The path to a corepoint file. If not provided, the first point cloud is used instead.
+            output_path (str/bool): The name and path for the output file. If not provided, the output won't be saved.
+            params (dict/str/bool): Either the path to a CC params file or a dictionary featuring the keys: 'cyl_radii', normal_radii', 'max_distance' and 'registration_error'. If not provided default parameters are set.
+            compr (int): A compression rate for the corepoints if no corepoint file is given. That means only every n-th point is used. Default value is 1, so no compression at all.
         '''
         self.output_path = output_path
         self.params = params
@@ -51,7 +51,7 @@ class Py4d_M3C2:
             self (Compare): The object itself.
             path1 (str): The output path for the distance plot.
             path2 (str): The output path for the lodetection plot.
-            dimension (bool): Specifies whether the plot is plotted in 2d(True) or 3d(False).
+            proj (bool): Specifies whether the plot is plotted in 2d(True) or 3d(False).
         '''
         map1 = Map_Diff(self.distances, self.corepoints, "M3C2 distances")
         map2 = Map_Diff(self.uncertainties['lodetection'], self.corepoints, "M3C2 lodetection")
@@ -65,6 +65,7 @@ class Py4d_M3C2:
 
         Parameters:
             self (Py4d_M3C2): The object itself.
+            cc_mode (bool): Specifies if the header is written with CC vocabulary or py4dgeo vocabulary.
         '''
         if cc_mode: keys = ['M3C2__distance', 'distance__uncertainty', 'STD_cloud1', 'STD_cloud2', 'Npoints_cloud1', 'Npoints_cloud2', 'NormalX', 'NormalY', 'NormalZ']
         else: keys = ['distance', 'lodetection', 'spread1', 'spread2', 'num_samples1', 'num_samples2', 'nx', 'ny', 'nz']
@@ -122,31 +123,6 @@ class Py4d_M3C2:
 
         # Multi-Scale Mode
         if dc['NormalMode'] == '2': self.params['normal_radii'] = (float(dc['NormalMinScale']), float(dc['NormalStep']), float(dc['NormalMaxScale']))
-
-    def read_params(self):
-        '''
-        Read the required parameters from a given file out and store them in a dictionary.
-        
-        Parameters:
-            self (Py4d_M3C2): The object itself.
-        
-        Returns:
-            dict: A dictionary containing the required parameters for the m3c2-algorithm.
-        '''
-        dc = {}
-        f = open(self.params)
-        for i in f.readlines():
-            i = i.split("\n")[0]        
-            if i != "[General]":
-                i = i.split("=")
-                dc.update({i[0]:i[1]})
-        params = {"cyl_radii" : (float(dc["SearchScale"])/2,), 
-                "normal_radii" : (float(dc["NormalScale"])/2,), 
-                "max_distance" : float(dc["SearchDepth"]), 
-                "registration_error": float(dc["RegistrationError"])}
-        
-        if dc["NormalMode"] == "2": params["normal_radii"] = (float(dc["NormalMinScale"]), float(dc["NormalStep"]), float(dc["NormalMaxScale"]))
-        return params
 
     def read(self, *path, other_epoch=None, **parse_opts):
         '''

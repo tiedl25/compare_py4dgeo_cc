@@ -42,6 +42,7 @@ class Map_Diff:
             ttl (str): The title of the subplot.
             ax (matplotlib.axes._subplots.AxesSubplot): The Axes.
             max (float): The maximum of the mapped values.
+            min (float): The minimum of the mapped values. 
             proj (str): Specifies if the plot is 2d or 3d.
         '''
         ax.set_xlabel('X Axis')
@@ -85,6 +86,7 @@ class Map_Diff:
             self (Compare): The object itself.
             ax (matplotlib.axes._subplots.AxesSubplot): The Axes.
             max (float): The maximum of the mapped values.
+            min (float): The minimum of the mapped values. 
             proj (str): Specifies if the plot is 2d or 3d.
         '''
         ax.set_xlabel('X Axis')
