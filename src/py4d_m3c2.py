@@ -1,5 +1,5 @@
 import py4dgeo
-import helper as hlp
+import file_handle as fhandle
 import numpy as np
 
 from map_diff import Map_Diff
@@ -59,35 +59,12 @@ class Py4d_M3C2:
         map1.mapDiff(path1, True, proj)    
         map2.mapDiff(path2, True, proj)
 
-    def write_to_xyz(self, cc_mode=True):
+    def write(self, cc_mode=True):
         '''
-        Write a point cloud (coordinates) with additional parameters to an ascii file.
+        Handle writing to different filetypes(ascii and las/laz), so theres no need to change the function when using a different file extension.
 
         Parameters:
             self (Py4d_M3C2): The object itself.
-            cc_mode (bool): Specifies if CC vocabulary gets used instead of py4dgeo vocabulary for the header line.
-        '''
-        with open(self.output_path, mode='w') as file:
-            if cc_mode: file.write("//X Y Z M3C2__distance distance__uncertainty STD_cloud1 STD_cloud2 Npoints_cloud1 Npoints_cloud2 NormalX NormalY NormalZ\n")
-            else: file.write("//x y z distance lodetection spread1 spread2 num_samples1 num_samples2 nx ny nz\n")
-
-            for i in range(0, np.size(self.distances)):
-                x,y,z = self.corepoints[i]
-                nx,ny,nz = self.normals[i]
-                file.write("{} {} {} {} {} {} {} {} {} {} {} {}\n".format(
-                            str(x), str(y), str(z),
-                            str(self.distances[i]), str(self.uncertainties['lodetection'][i]),
-                            str(self.uncertainties["spread1"][i]), str(self.uncertainties["spread2"][i]),
-                            str(self.uncertainties["num_samples1"][i]), str(self.uncertainties["num_samples2"][i]),
-                            str(nx), str(ny), str(nz)))
-
-    def write_to_las(self, cc_mode=True):
-        '''
-        Write a point cloud (coordinates) with additional parameters to a las/laz file.
-
-        Parameters:
-            self (Py4d_M3C2): The object itself.
-            cc_mode (bool): Specifies if CC vocabulary gets used instead of py4dgeo vocabulary for the header line.
         '''
         if cc_mode: keys = ['M3C2__distance', 'distance__uncertainty', 'STD_cloud1', 'STD_cloud2', 'Npoints_cloud1', 'Npoints_cloud2', 'NormalX', 'NormalY', 'NormalZ']
         else: keys = ['distance', 'lodetection', 'spread1', 'spread2', 'num_samples1', 'num_samples2', 'nx', 'ny', 'nz']
@@ -102,19 +79,10 @@ class Py4d_M3C2:
                     keys[7] : self.normals[0:,1], 
                     keys[8] : self.normals[0:,2]}
 
-        hlp.write_las(self.corepoints, self.output_path, attribute_dict=attributes)
-
-    def write(self):
-        '''
-        Handle writing to different filetypes(ascii and las/laz), so theres no need to change the function when using a different file extension.
-
-        Parameters:
-            self (Py4d_M3C2): The object itself.
-        '''
         if self.output_path[-3:] == "las" or self.output_path[-3:] == "laz":
-            self.write_to_las()
+            fhandle.write_las(self.corepoints, self.output_path, attributes)
         elif self.output_path[-3:] == "xyz" or self.output_path[-3:] == "txt":
-            self.write_to_xyz()
+            fhandle.write_xyz(self.corepoints, self.output_path, attributes)
         else:
             print("File extension has to be las, laz, xyz or txt")
             quit()

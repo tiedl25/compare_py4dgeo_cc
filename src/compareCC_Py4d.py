@@ -7,7 +7,7 @@ import csv
 import statistics
 import matplotlib.pyplot as plt  
 import matplotlib.ticker as ticker
-import helper as hlp
+import file_handle as fhandle
 
 from py4d_m3c2 import Py4d_M3C2
 from vec_calc import Vec_Calc
@@ -416,9 +416,9 @@ def main():
             os.system('{} -silent -NO_TIMESTAMP -auto_save on -c_export_fmt las -o {} -o {} -M3C2 {} -NORMALS_TO_SFS -SAVE_CLOUDS FILE "{}{}"'.format(CC_BIN, PATH_CLOUD1, PATH_CLOUD2, PARAMS, spaces, OUTPUT['cc']))
 
     print('Read CloudCompare file')
-    reference = hlp.read_las(OUTPUT['cc'], get_attributes=True)
+    reference = fhandle.read_las(OUTPUT['cc'], get_attributes=True)
     print('Read Py4dGeo file')
-    cloud = hlp.read_las(OUTPUT['py4d'], get_attributes=True)
+    cloud = fhandle.read_las(OUTPUT['py4d'], get_attributes=True)
 
     if 'STD_cloud1' in reference[1]: spread_set = True
     else: spread_set = False

@@ -46,7 +46,7 @@ def read_las(pointcloudfile,get_attributes=False,useevery=1):
 
         return (coords, attributes, normals)
 
-def write_las(outpoints,outfilepath,attribute_dict={}):
+def write_las(points, path, attributes={}):
     '''
     Write a point cloud to a las/laz file
 
@@ -60,10 +60,10 @@ def write_las(outpoints,outfilepath,attribute_dict={}):
 
     las = laspy.LasData(hdr)
 
-    las.x = outpoints[:, 0]
-    las.y = outpoints[:, 1]
-    las.z = outpoints[:, 2]
-    for key,vals in attribute_dict.items():
+    las.x = points[:, 0]
+    las.y = points[:, 1]
+    las.z = points[:, 2]
+    for key,vals in attributes.items():
         try:
             las[key] = vals
         except:
@@ -73,6 +73,21 @@ def write_las(outpoints,outfilepath,attribute_dict={}):
                 ))
             las[key] = vals
 
-    las.write(outfilepath)
+    las.write(path)
 
-    return
+def read_xyz():
+    pass
+
+def write_xyz(points, path, attributes={}):
+    with open(path, mode='w') as file:
+        file.write('//X Y Z ')
+        for s in attributes.keys(): file.write(s + ' ')
+        file.write('\n')
+
+        for i in range(0, int(np.size(points)/3)):
+            x,y,z = points[i]
+            file.write("{} {} {} ".format(
+                        str(x), str(y), str(z)))
+            for item in attributes.keys():
+                file.write(str(attributes[item][i]) + ' ')
+            file.write('\n')
