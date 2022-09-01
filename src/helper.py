@@ -1,32 +1,5 @@
-import os
 import numpy as np
-
-def sigDiff(val1, val2, i="false", r=20):
-    '''
-    Determine if the difference between two values is significant or not.
-
-    Parameters:
-        val1 (float): The first value.
-        val2 (float): The second value.
-        i (int): (optional) Sets the index in an array/list.
-        r (int): (optional) Sets the number of decimal places which are included. The default value is 20
-
-    Returns:
-        float: The significant difference.
-    '''
-    if i != "false": return 0 if round(abs(val1[i]-val2[i]),r) == 0 or None else abs(val1[i]-val2[i])
-    return 0 if round(abs(val1-val2),r) == 0 or None else abs(val1-val2)
-
-def reorder_list(li):
-    '''
-    Reorder a list by columns instead of rows.
-
-    Parameters:
-        li (list): The input list.
-    Returns: 
-        list: The reordered list
-    '''
-    return (li[0:,0], li[0:,1], li[0:,2])
+import laspy
 
 def read_las(pointcloudfile,get_attributes=False,useevery=1):
     '''
@@ -40,9 +13,6 @@ def read_las(pointcloudfile,get_attributes=False,useevery=1):
     Returns:
         numpy.ndarray: 3D array of points (x,y,z) of length number of points in input file (or subsampled by 'useevery')
     '''
-
-    import laspy
-    import numpy as np
 
     # read the file
     inFile = laspy.read(pointcloudfile)
@@ -76,15 +46,6 @@ def read_las(pointcloudfile,get_attributes=False,useevery=1):
 
         return (coords, attributes, normals)
 
-def compare_func(first, second):
-    c=0
-    with open('compare_func.txt', mode='w') as file:
-        for i in range(np.size(first)):
-            file.write(f'{first[i]}\t{second[i]}\n')
-            if first[i] == second[i]: 
-                c+=1
-    print(f'{c} out of {np.size(first)}\n')
-
 def write_las(outpoints,outfilepath,attribute_dict={}):
     '''
     Write a point cloud to a las/laz file
@@ -94,8 +55,6 @@ def write_las(outpoints,outfilepath,attribute_dict={}):
         outfilepath (str): specification of output file
         attribute_dict (dict): dictionary of attributes (key: name of attribute; value: 1D array of attribute values in order of points in 'outpoints'); if not specified, dictionary is empty and nothing is added
     '''
-
-    import laspy
 
     hdr = laspy.LasHeader(version="1.4", point_format=6)
 

@@ -75,6 +75,26 @@ class Compare:
         self.slopes = np.empty(self.size, dtype=object)
         self.aspects = np.empty(self.size, dtype=object)
 
+    def sigDiff(self, val1, val2, i="false", r=20):
+        '''
+        Determine if the difference between two values is significant or not.
+
+        Parameters:
+            val1 (float): The first value.
+            val2 (float): The second value.
+            i (int): (optional) Sets the index in an array/list.
+            r (int): (optional) Sets the number of decimal places which are included. The default value is 20
+
+        Returns:
+            float: The significant difference.
+        '''
+        if i != "false": return 0 if round(abs(val1[i]-val2[i]),r) == 0 or None else abs(val1[i]-val2[i])
+        return 0 if round(abs(val1-val2),r) == 0 or None else abs(val1-val2)
+
+    def reorder_list(self, li):
+        '''Reorder a list by columns instead of rows.'''
+        return (li[0:,0], li[0:,1], li[0:,2])
+
     def calc_differences(self):
         '''
         Calculate all the differences between related arguments of this class
@@ -85,29 +105,29 @@ class Compare:
         Returns:
             dict: The differences between each related argument of both point clouds
         '''
-        x1,y1,z1 = hlp.reorder_list(self.cl['pts'])
-        x2,y2,z2 = hlp.reorder_list(self.re['pts'])
+        x1,y1,z1 = self.reorder_list(self.cl['pts'])
+        x2,y2,z2 = self.reorder_list(self.re['pts'])
 
-        nx1,ny1,nz1 = hlp.reorder_list(self.cl['normals'])
-        nx2,ny2,nz2 = hlp.reorder_list(self.re['normals'])
+        nx1,ny1,nz1 = self.reorder_list(self.cl['normals'])
+        nx2,ny2,nz2 = self.reorder_list(self.re['normals'])
 
         vec_calc = Vec_Calc()
 
         for i in range(0, self.size):
-            self.diffs['X'][i] = hlp.sigDiff(x1, x2, i)
-            self.diffs['Y'][i] = hlp.sigDiff(y1, y2, i)
-            self.diffs['Z'][i] = hlp.sigDiff(z1, z2, i)
-            self.diffs['NX'][i] = hlp.sigDiff(nx1, nx2, i)
-            self.diffs['NY'][i] = hlp.sigDiff(ny1, ny2, i)
-            self.diffs['NZ'][i] = hlp.sigDiff(nz1, nz2, i)
-            self.diffs['Distance'][i] = hlp.sigDiff(self.cl['dist'], self.re['dist'], i)
-            self.diffs['LODetection'][i] = hlp.sigDiff(self.cl['lod'], self.re['lod'], i)
+            self.diffs['X'][i] = self.sigDiff(x1, x2, i)
+            self.diffs['Y'][i] = self.sigDiff(y1, y2, i)
+            self.diffs['Z'][i] = self.sigDiff(z1, z2, i)
+            self.diffs['NX'][i] = self.sigDiff(nx1, nx2, i)
+            self.diffs['NY'][i] = self.sigDiff(ny1, ny2, i)
+            self.diffs['NZ'][i] = self.sigDiff(nz1, nz2, i)
+            self.diffs['Distance'][i] = self.sigDiff(self.cl['dist'], self.re['dist'], i)
+            self.diffs['LODetection'][i] = self.sigDiff(self.cl['lod'], self.re['lod'], i)
             if self.spread_set == True:
-                self.diffs['Spread1'][i] = hlp.sigDiff(self.cl['spread'][0], self.re['spread'][0], i)
-                self.diffs['Spread2'][i] = hlp.sigDiff(self.cl['spread'][1], self.re['spread'][1], i)
+                self.diffs['Spread1'][i] = self.sigDiff(self.cl['spread'][0], self.re['spread'][0], i)
+                self.diffs['Spread2'][i] = self.sigDiff(self.cl['spread'][1], self.re['spread'][1], i)
             if self.sample_set == True:
-                self.diffs['NumSamples1'][i] = hlp.sigDiff(self.cl['num_samples'][0], self.re['num_samples'][0], i)
-                self.diffs['NumSamples2'][i] = hlp.sigDiff(self.cl['num_samples'][1], self.re['num_samples'][1], i)
+                self.diffs['NumSamples1'][i] = self.sigDiff(self.cl['num_samples'][0], self.re['num_samples'][0], i)
+                self.diffs['NumSamples2'][i] = self.sigDiff(self.cl['num_samples'][1], self.re['num_samples'][1], i)
 
             normalized_vector = vec_calc.transform((nx2[i], ny2[i], nz2[i]), (nx1[i], ny1[i], nz1[i]))
             self.slopes[i] = vec_calc.getSlope(normalized_vector)
@@ -287,7 +307,7 @@ class Compare:
             header.extend(['Aspect', 'Slope'])
             writer.writerow(header)
 
-            x,y,z = hlp.reorder_list(self.re['pts'])
+            x,y,z = self.reorder_list(self.re['pts'])
 
             for i in range(0, self.size):
                 row = [x[i], y[i], z[i],

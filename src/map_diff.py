@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-import helper as hlp
 
 class Map_Diff:
     '''
@@ -48,7 +47,7 @@ class Map_Diff:
         ax.set_xlabel('X Axis')
         ax.set_ylabel('Y Axis')
 
-        x,y,z = hlp.reorder_list(crds) #returns X,Y,Z coordinates
+        x,y,z = crds[0:,0], crds[0:,1], crds[0:,2] #returns X,Y,Z coordinates
 
         pointColors = abs(vals)/max
 
@@ -90,7 +89,7 @@ class Map_Diff:
         '''
         ax.set_xlabel('X Axis')
         ax.set_ylabel('Y Axis')
-        x,y,z = hlp.reorder_list(self.coords) #returns X,Y,Z coordinates
+        x,y,z = self.coords[0:,0], self.coords[0:,1], self.coords[0:,2] #returns X,Y,Z coordinates
 
         pointColors = abs(self.mapped_vals)/max
 
