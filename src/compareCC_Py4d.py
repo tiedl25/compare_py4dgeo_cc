@@ -339,6 +339,22 @@ def checkParams(skip):
 
     else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False
 
+def reorder(cloud, spread_set, sample_set):
+    cl_normals = np.array([cloud[1]['NormalX'], cloud[1]['NormalY'], cloud[1]['NormalZ']])
+    cl_normals = np.transpose(cl_normals)
+
+    if spread_set:
+        cl_spread = (cloud[1]['STD_cloud1'], cloud[1]['STD_cloud2'])
+    else: 
+        cl_spread = None
+
+    if sample_set: 
+        cl_num_samples = (cloud[1]['Npoints_cloud1'], cloud[1]['Npoints_cloud2'])
+    else:
+        cl_num_samples = None
+
+    return cl_normals, cl_spread, cl_num_samples
+
 def main():
     '''
     Main part of the programm. Will only be executed when the file is executed directly from the command line, not by implementing it in another package.
@@ -384,24 +400,13 @@ def main():
     print('Read Py4dGeo file')
     cloud = hlp.read_las(OUTPUT['py4d'], get_attributes=True)
 
-    re_normals = np.array([reference[1]['NormalX'], reference[1]['NormalY'], reference[1]['NormalZ']])
-    cl_normals = np.array([cloud[1]['NormalX'], cloud[1]['NormalY'], cloud[1]['NormalZ']])
-    re_normals = np.transpose(re_normals)
-    cl_normals = np.transpose(cl_normals)
+    if 'STD_cloud1' in reference[1]: spread_set = True
+    else: spread_set = False
+    if 'Npoints_cloud1' in reference[1]: sample_set = True
+    else: sample_set = False
 
-    if 'STD_cloud1' in reference[1]:
-        re_spread = (reference[1]['STD_cloud1'], reference[1]['STD_cloud2'])
-        cl_spread = (cloud[1]['STD_cloud1'], cloud[1]['STD_cloud2'])
-    else: 
-        re_spread = None
-        cl_spread = None
-
-    if 'Npoints_cloud1' in reference[1]: 
-        re_num_samples = (reference[1]['Npoints_cloud1'], reference[1]['Npoints_cloud2'])
-        cl_num_samples = (cloud[1]['Npoints_cloud1'], cloud[1]['Npoints_cloud2'])
-    else:
-        re_num_samples = None
-        cl_num_samples = None
+    re_normals, re_spread, re_num_samples = reorder(reference, spread_set, sample_set)
+    cl_normals, cl_spread, cl_num_samples = reorder(cloud, spread_set, sample_set)
 
     comp = Compare(reference[0], re_normals,
                     reference[1]['M3C2__distance'], 

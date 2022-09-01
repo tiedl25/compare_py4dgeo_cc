@@ -147,10 +147,11 @@ class Py4d_M3C2:
         self.params = {'cyl_radii' : (float(dc['SearchScale'])/2,), 
                     'normal_radii' : (float(dc['NormalScale'])/2,), 
                     'max_distance' : float(dc['SearchDepth']), 
-                    'registration_error': float(dc['RegistrationError']),
                     'robust_aggr': dc['UseMedian'],
                     'orientation_vector': orientation_mapping[prefered_orientation]}
         
+        if dc['RegistrationErrorEnabled'] == 'true': self.params.update({'registration_error': float(dc['RegistrationError'])})
+
         # Multi-Scale Mode
         if dc['NormalMode'] == '2': self.params['normal_radii'] = (float(dc['NormalMinScale']), float(dc['NormalStep']), float(dc['NormalMaxScale']))
 
@@ -248,7 +249,7 @@ def main():
                     params='m3c2_params.txt', 
                     output_path='tmp/run.xyz')
     py4d.run()
-    py4d.mapDiff('output/py4d_distance', 'output/py4d_lodetection', '2d')
+    #py4d.mapDiff('output/py4d_distance', 'output/py4d_lodetection', '2d')
 
 if __name__ == "__main__":
     main()
