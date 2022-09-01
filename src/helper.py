@@ -76,6 +76,15 @@ def read_las(pointcloudfile,get_attributes=False,useevery=1):
 
         return (coords, attributes, normals)
 
+def compare_func(first, second):
+    c=0
+    with open('compare_func.txt', mode='w') as file:
+        for i in range(np.size(first)):
+            file.write(f'{first[i]}\t{second[i]}\n')
+            if first[i] == second[i]: 
+                c+=1
+    print(f'{c} out of {np.size(first)}\n')
+
 def write_las(outpoints,outfilepath,attribute_dict={}):
     '''
     Write a point cloud to a las/laz file
@@ -108,39 +117,3 @@ def write_las(outpoints,outfilepath,attribute_dict={}):
     las.write(outfilepath)
 
     return
-    
-#doenst work properly
-def xyz_to_las(path):
-    '''
-    Get the Numsamples from CC. CC has no option available to directly save Numsamples/Npoints to a las file, but to an ascii file. The CC output needs to be saved in an xyz file, which then gets translated to las.
-    
-    Parameters:
-        path (str): Path to the xyz file.
-    '''
-    attributes = {}
-
-    f = open(path,"r")
-    lines = f.readlines()
-    header = lines[0][2:]
-    header = header.strip('\n')
-    li = header.split(' ')
-
-    ptrs = []
-
-    attr_keys = ['normal_scale', 'Npoints_cloud1', 'Npoints_cloud2', 'STD_cloud1', 'STD_cloud2', 'significant_change', 'distance__uncertainty', 'M3C2__distance', 'NormalX', 'NormalY', 'NormalZ']
-    for i in attr_keys: attributes[i] = np.empty(np.size(lines))
-    
-    for i in range(1, np.size(lines)):
-        line = lines[i].split(' ')
-        for j in range(0, np.size(attr_keys)): attributes[attr_keys[j]][i] = line[j+3]
-        ptrs.append([float(line[0]), float(line[1]), float(line[2])])
-        
-    ptrs = np.asarray(ptrs)
-
-    f.close()
-
-    os.remove(path)
-    path = path[:-3]
-    path = path + 'laz'
-    
-    write_las(ptrs, path, attribute_dict=attributes)

@@ -25,7 +25,7 @@ class Compare:
         aspects (numpy.array): The aspects between related normal vectors in both clouds.
         slopes (numpy.array): The slopes between related normal vectors in both clouds.
     '''
-    def __init__(self, re_pts, re_dist, re_lod, re_spread1, re_spread2, re_normals, cl_pts, cl_dist, cl_lod, cl_spread1, cl_spread2, cl_normals):
+    def __init__(self, re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod, re_spread=None, re_samples=None, cl_spread=None, cl_samples=None):
         '''
         The class constructor, that initializes the attributes of the Compare class
 
@@ -34,27 +34,46 @@ class Compare:
             re_pts (numpy.ndarray): the xyz-coordinates of the reference point cloud
             re_dist (numpy.ndarray): the m3c2-distances of the reference point cloud
             re_lod (numpy.ndarray): the level-of-detection of the reference point cloud
-            re_spread1 (numpy.ndarray): the standard deviation of distances of the reference point cloud
-            re_spread2 (numpy.ndarray): the standard deviation of distances of the reference point cloud
+            re_spread (list): the standard deviation of distances of the reference point cloud
+            re_samples (list):
             re_normals (numpy.ndarray): the normal-coordinates of the reference point cloud
             cl_pts (numpy.ndarray): the xyz-coordinates of the py4dgeo point cloud
             cl_dist (numpy.ndarray): the m3c2-distances of the py4dgeo point cloud
             cl_lod (numpy.ndarray): the level-of-detection of the py4dgeo point cloud
-            cl_spread1 (numpy.ndarray): the standard deviation of distances of the py4dgeo point cloudy
-            cl_spread2 (numpy.ndarray): the standard deviation of distances of the py4dgeopoint cloudy
+            cl_spread (list): the standard deviation of distances of the py4dgeo point cloudy
+            cl_samples (list):
             cl_normals (numpy.ndarray): the normal-coordinates of the py4dgeo point cloudy)
         '''
-        self.re = {'pts': re_pts, 'dist' : re_dist, 'lod' : re_lod, 'spread1' : re_spread1, 'spread2' : re_spread2, 'normals' : re_normals}
-        self.cl = {'pts': cl_pts, 'dist' : cl_dist, 'lod' : cl_lod, 'spread1' : cl_spread1, 'spread2' : cl_spread2, 'normals' : cl_normals}
+        self.re = {'pts': re_pts, 'dist' : re_dist, 'lod' : re_lod, 'normals' : re_normals}
+        self.cl = {'pts': cl_pts, 'dist' : cl_dist, 'lod' : cl_lod, 'normals' : cl_normals}
+
+        self.diffs = {}     
+        keys = ['X', 'Y', 'Z', 'NX', 'NY', 'NZ', 'Distance', 'LODetection']
+
+        self.spread_set = False
+        self.sample_set = False
+
+        if re_spread != None:
+            self.re.update({'spread' : re_spread})
+            self.cl.update({'spread' : cl_spread})
+            keys.extend(['Spread1', 'Spread2'])
+            self.spread_set = True
+            
+        if re_samples != None:
+            self.re.update({'num_samples' : re_samples})
+            self.cl.update({'num_samples' : cl_samples})
+            keys.extend(['NumSamples1', 'NumSamples2'])
+            self.sample_set = True
+
         self.size = int(np.size(re_pts)/3)
+
+        for i in range(0, len(keys)):
+                        self.diffs[keys[i]] = np.empty(self.size, dtype=object)
+
+        
 
         self.slopes = np.empty(self.size, dtype=object)
         self.aspects = np.empty(self.size, dtype=object)
-
-        self.diffs = {}     
-        keys = ['X', 'Y', 'Z', 'NX', 'NY', 'NZ', 'Distance', 'LODetection', 'Spread1', 'Spread2']
-        for i in range(0, 10):
-                self.diffs[keys[i]] = np.empty(self.size, dtype=object)
 
     def calc_differences(self):
         '''
@@ -68,6 +87,7 @@ class Compare:
         '''
         x1,y1,z1 = hlp.reorder_list(self.cl['pts'])
         x2,y2,z2 = hlp.reorder_list(self.re['pts'])
+
         nx1,ny1,nz1 = hlp.reorder_list(self.cl['normals'])
         nx2,ny2,nz2 = hlp.reorder_list(self.re['normals'])
 
@@ -82,13 +102,14 @@ class Compare:
             self.diffs['NZ'][i] = hlp.sigDiff(nz1, nz2, i)
             self.diffs['Distance'][i] = hlp.sigDiff(self.cl['dist'], self.re['dist'], i)
             self.diffs['LODetection'][i] = hlp.sigDiff(self.cl['lod'], self.re['lod'], i)
-            self.diffs['Spread1'][i] = hlp.sigDiff(self.cl['spread1'], self.re['spread1'], i)
-            self.diffs['Spread2'][i] = hlp.sigDiff(self.cl['spread2'], self.re['spread2'], i)
+            if self.spread_set == True:
+                self.diffs['Spread1'][i] = hlp.sigDiff(self.cl['spread'][0], self.re['spread'][0], i)
+                self.diffs['Spread2'][i] = hlp.sigDiff(self.cl['spread'][1], self.re['spread'][1], i)
+            if self.sample_set == True:
+                self.diffs['NumSamples1'][i] = hlp.sigDiff(self.cl['num_samples'][0], self.re['num_samples'][0], i)
+                self.diffs['NumSamples2'][i] = hlp.sigDiff(self.cl['num_samples'][1], self.re['num_samples'][1], i)
 
-            cl_normal = nx1[i], ny1[i], nz1[i]
-            re_normal = nx2[i], ny2[i], nz2[i]
-
-            normalized_vector = vec_calc.transform(re_normal, cl_normal)
+            normalized_vector = vec_calc.transform((nx2[i], ny2[i], nz2[i]), (nx1[i], ny1[i], nz1[i]))
             self.slopes[i] = vec_calc.getSlope(normalized_vector)
             self.aspects[i] = vec_calc.getAspect(normalized_vector)
 
@@ -144,12 +165,16 @@ class Compare:
 
     def plotSpreadDiff(self, path):
         '''
-        Plot differences between standard deviation spread1/spread2 between both point clouds.
+        Plot standard deviation differences between both point clouds.
 
         Parameters:
             self (Compare): The object itself.
             path (str): The output path for the spread plot.
         '''
+        if not self.spread_set:
+            print('No spread information')
+            return
+
         print('Plot spread differences')
 
         titles = ('Spread1', 'Spread2')
@@ -172,7 +197,39 @@ class Compare:
         plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
 
         plt.savefig(path)
-        plt.close
+        plt.close()
+
+    def plotSampleDiff(self, path):
+        '''
+        Plot point density differences between both point clouds.
+
+        Parameters:
+            self (Compare): The object itself.
+            path (str): The output path for the spread plot.
+        '''
+        if not self.sample_set:
+            print('No num_sample information')
+            return
+
+        print('Plot num_sample differences')
+
+        titles = ('num_samples1', 'num_samples2')
+
+        plt.xlabel('Difference')
+        plt.ylabel('Number of points')
+
+        plt.subplot(1,2,1)
+        li = [x for x in self.diffs['NumSamples1'] if np.isnan(x) == False]
+        plt.hist(li, bins=50)
+        plt.title(titles[0])
+
+        plt.subplot(1,2,2)
+        li = [x for x in self.diffs['NumSamples2'] if np.isnan(x) == False]
+        plt.hist(li, bins=50)
+        plt.title(titles[1])
+
+        plt.savefig(path)
+        plt.close()      
 
     def writeStatistics(self, path):
         '''
@@ -182,7 +239,7 @@ class Compare:
             self (Compare): The object itself.
             path (str): The output path for the csv file.
         '''
-        s = 13
+        s = len(self.diffs)+3
         mean = np.empty(s, dtype=object)
         median = np.empty(s, dtype=object)
         std_dev = np.empty(s, dtype=object)
@@ -195,9 +252,9 @@ class Compare:
         keys.extend(['Aspect', 'Slope'])
         
         for i in range(1,s):
-            if i<11: li = [x for x in self.diffs[keys[i]] if np.isnan(x) == False]
-            elif i==11: li = [x for x in self.aspects if np.isnan(x) == False]
-            elif i==12: li = [x for x in self.slopes if np.isnan(x) == False]
+            if i<s-2: li = [x for x in self.diffs[keys[i]] if np.isnan(x) == False]
+            elif i==s-2: li = [x for x in self.aspects if np.isnan(x) == False]
+            elif i==s-1: li = [x for x in self.slopes if np.isnan(x) == False]
 
             if np.size(li) > 1:
                 mean[i] = statistics.mean(li)
@@ -233,21 +290,20 @@ class Compare:
             x,y,z = hlp.reorder_list(self.re['pts'])
 
             for i in range(0, self.size):
-                writer.writerow([x[i],
-                                y[i],
-                                z[i],
-                                self.diffs['X'][i],
-                                self.diffs['Y'][i],
-                                self.diffs['Z'][i],
-                                self.diffs['NX'][i],
-                                self.diffs['NY'][i],
-                                self.diffs['NZ'][i],
-                                self.diffs['Distance'][i],
-                                self.diffs['LODetection'][i],
-                                self.diffs['Spread1'][i],
-                                self.diffs['Spread2'][i],
-                                self.aspects[i],
-                                self.slopes[i]])
+                row = [x[i], y[i], z[i],
+                        self.diffs['X'][i],
+                        self.diffs['Y'][i],
+                        self.diffs['Z'][i],
+                        self.diffs['NX'][i],
+                        self.diffs['NY'][i],
+                        self.diffs['NZ'][i],
+                        self.diffs['Distance'][i],
+                        self.diffs['LODetection'][i]]
+                if self.spread_set: row.extend([self.diffs['Spread1'][i], self.diffs['Spread2'][i]])
+                if self.sample_set: row.extend([self.diffs['NumSamples1'][i], self.diffs['NumSamples2'][i]])
+                row.extend([self.aspects[i], self.slopes[i]])
+                
+                writer.writerow(row)
 
 def checkParams(skip):
     '''
@@ -290,7 +346,7 @@ def main():
     test = True # for debugging and developing use default parameters
     if len(sys.argv) > 1: test = False
     skip = True # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
-    
+
     PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED = checkParams(test)  
     if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare'
     elif platform.system() == 'Linux': CC_BIN = 'org.cloudcompare.CloudCompare'
@@ -302,7 +358,8 @@ def main():
             'normal_diff' : '/plot_normals_dev', 
             'distance_diff' : '/map_diff_distance', 
             'lod_diff' : '/map_diff_lodetection',
-            'spread_diff' : '/hist_diff_spread'}
+            'spread_diff' : '/hist_diff_spread',
+            'sample_diff' : '/hist_diff_sample'}
 
     for out in OUTPUT.items(): OUTPUT[out[0]] = OUTPUT_DIR + out[1]
 
@@ -332,23 +389,34 @@ def main():
     re_normals = np.transpose(re_normals)
     cl_normals = np.transpose(cl_normals)
 
-    comp = Compare(reference[0], 
-            (reference[1])['M3C2__distance'], 
-            (reference[1])['distance__uncertainty'], 
-            (reference[1])['STD_cloud1'], 
-            (reference[1])['STD_cloud2'], 
-            re_normals, 
-            cloud[0], 
-            (cloud[1])['M3C2__distance'], 
-            (cloud[1])['distance__uncertainty'], 
-            (cloud[1])['STD_cloud1'], 
-            (cloud[1])['STD_cloud2'], 
-            cl_normals)
+    if 'STD_cloud1' in reference[1]:
+        re_spread = (reference[1]['STD_cloud1'], reference[1]['STD_cloud2'])
+        cl_spread = (cloud[1]['STD_cloud1'], cloud[1]['STD_cloud2'])
+    else: 
+        re_spread = None
+        cl_spread = None
+
+    if 'Npoints_cloud1' in reference[1]: 
+        re_num_samples = (reference[1]['Npoints_cloud1'], reference[1]['Npoints_cloud2'])
+        cl_num_samples = (cloud[1]['Npoints_cloud1'], cloud[1]['Npoints_cloud2'])
+    else:
+        re_num_samples = None
+        cl_num_samples = None
+
+    comp = Compare(reference[0], re_normals,
+                    reference[1]['M3C2__distance'], 
+                    reference[1]['distance__uncertainty'], 
+                    cloud[0], cl_normals, 
+                    cloud[1]['M3C2__distance'], 
+                    cloud[1]['distance__uncertainty'], 
+                    re_spread, re_num_samples,
+                    cl_spread, cl_num_samples)
 
     comp.calc_differences()
     comp.plotNormDiff(OUTPUT['normal_diff'])
     comp.mapDiff(OUTPUT['distance_diff'], OUTPUT['lod_diff'], PROJECTION, ADVANCED)
     comp.plotSpreadDiff(OUTPUT['spread_diff'])
+    comp.plotSampleDiff(OUTPUT['sample_diff'])
     comp.writeStatistics(OUTPUT['stats'])
     comp.writeDiff(OUTPUT['diffs'])
 

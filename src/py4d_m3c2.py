@@ -59,42 +59,48 @@ class Py4d_M3C2:
         map1.mapDiff(path1, True, proj)    
         map2.mapDiff(path2, True, proj)
 
-    def write_to_xyz(self):
+    def write_to_xyz(self, cc_mode=True):
         '''
         Write a point cloud (coordinates) with additional parameters to an ascii file.
 
         Parameters:
             self (Py4d_M3C2): The object itself.
+            cc_mode (bool): Specifies if CC vocabulary gets used instead of py4dgeo vocabulary for the header line.
         '''
-        print(self.corepoints)
-        f = open(self.output_path, "w")
-        f.write("//X Y Z M3C2__distance distance__uncertainty STD_cloud1 STD_cloud2 NormalX NormalY NormalZ\n")
-        for i in range(0, int(np.size(self.corepoints)/3)):
-            x,y,z = self.corepoints[i]
-            nx,ny,nz = self.normals[i]
-            f.write("{} {} {} {} {} {} {} {} {} {} {} {}\n".format(str(x), str(y), str(z),
-                                                                str(self.distances[i]), str(self.uncertainties['lodetection'][i]),
-                                                                str((self.uncertainties["spread1"])[i]), str((self.uncertainties["spread2"])[i]),
-                                                                str((self.uncertainties["num_samples1"])[i]), str((self.uncertainties["num_samples2"])[i]),
-                                                                str(nx), str(ny), str(nz)))
-        f.close()
+        with open(self.output_path, mode='w') as file:
+            if cc_mode: file.write("//X Y Z M3C2__distance distance__uncertainty STD_cloud1 STD_cloud2 Npoints_cloud1 Npoints_cloud2 NormalX NormalY NormalZ\n")
+            else: file.write("//x y z distance lodetection spread1 spread2 num_samples1 num_samples2 nx ny nz\n")
 
-    def write_to_las(self):
+            for i in range(0, np.size(self.distances)):
+                x,y,z = self.corepoints[i]
+                nx,ny,nz = self.normals[i]
+                file.write("{} {} {} {} {} {} {} {} {} {} {} {}\n".format(
+                            str(x), str(y), str(z),
+                            str(self.distances[i]), str(self.uncertainties['lodetection'][i]),
+                            str(self.uncertainties["spread1"][i]), str(self.uncertainties["spread2"][i]),
+                            str(self.uncertainties["num_samples1"][i]), str(self.uncertainties["num_samples2"][i]),
+                            str(nx), str(ny), str(nz)))
+
+    def write_to_las(self, cc_mode=True):
         '''
         Write a point cloud (coordinates) with additional parameters to a las/laz file.
 
         Parameters:
             self (Py4d_M3C2): The object itself.
+            cc_mode (bool): Specifies if CC vocabulary gets used instead of py4dgeo vocabulary for the header line.
         '''
-        attributes = {"M3C2__distance" : self.distances, 
-                        "distance__uncertainty" : self.uncertainties["lodetection"], 
-                        "NormalX" : self.normals[0:,0], 
-                        "NormalY" : self.normals[0:,1], 
-                        "NormalZ" : self.normals[0:,2], 
-                        "STD_cloud1" : self.uncertainties["spread1"], 
-                        "STD_cloud2" : self.uncertainties["spread2"],
-                        "Npoints_cloud1" : self.uncertainties["num_samples1"],
-                        "Npoints_cloud2" : self.uncertainties["num_samples2"]}
+        if cc_mode: keys = ['M3C2__distance', 'distance__uncertainty', 'STD_cloud1', 'STD_cloud2', 'Npoints_cloud1', 'Npoints_cloud2', 'NormalX', 'NormalY', 'NormalZ']
+        else: keys = ['distance', 'lodetection', 'spread1', 'spread2', 'num_samples1', 'num_samples2', 'nx', 'ny', 'nz']
+
+        attributes={keys[0] : self.distances, 
+                    keys[1] : self.uncertainties["lodetection"], 
+                    keys[2] : self.uncertainties["spread1"], 
+                    keys[3] : self.uncertainties["spread2"],
+                    keys[4] : self.uncertainties["num_samples1"],
+                    keys[5] : self.uncertainties["num_samples2"],
+                    keys[6] : self.normals[0:,0], 
+                    keys[7] : self.normals[0:,1], 
+                    keys[8] : self.normals[0:,2]}
 
         hlp.write_las(self.corepoints, self.output_path, attribute_dict=attributes)
 
@@ -240,7 +246,7 @@ def main():
     py4d = Py4d_M3C2(path1='data/test1.xyz', 
                     path2='data/test2.xyz', 
                     params='m3c2_params.txt', 
-                    output_path='run.xyz')
+                    output_path='tmp/run.xyz')
     py4d.run()
     py4d.mapDiff('output/py4d_distance', 'output/py4d_lodetection', '2d')
 
