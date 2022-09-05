@@ -38,10 +38,15 @@ class Py4d_M3C2:
         if corepoint_path: self.corepoints = self.read(corepoint_path).cloud
         else: self.corepoints = self.epoch1.cloud[::compr]
 
+        self.exp_samples = False
+        self.exp_spread = False
+
         if not self.params:
             self.params = {"cyl_radii":(0.5,), "normal_radii":(4.0, 0.5, 7.5),"max_distance":(15),"registration_error":(0.0024)}
         elif type(self.params) == str:
             self.read_cc_params()
+
+
 
     def mapDiff(self, path1, path2, proj='2d'):
         '''
@@ -79,6 +84,13 @@ class Py4d_M3C2:
                     keys[6] : self.normals[0:,0], 
                     keys[7] : self.normals[0:,1], 
                     keys[8] : self.normals[0:,2]}
+
+        if not self.exp_spread: 
+            attributes.pop(keys[2])
+            attributes.pop(keys[3])
+        if not self.exp_samples:
+            attributes.pop(keys[4])
+            attributes.pop(keys[5])
 
         if self.output_path[-3:] == "las" or self.output_path[-3:] == "laz":
             fhandle.write_las(self.corepoints, self.output_path, attributes)
@@ -120,6 +132,9 @@ class Py4d_M3C2:
                     'orientation_vector': orientation_mapping[prefered_orientation]}
         
         if dc['RegistrationErrorEnabled'] == 'true': self.params.update({'registration_error': float(dc['RegistrationError'])})
+
+        if dc['ExportDensityAtProjScale'] == 'true': self.exp_samples = True
+        if dc['ExportStdDevInfo'] == 'true': self.exp_spread = True
 
         # Multi-Scale Mode
         if dc['NormalMode'] == '2': self.params['normal_radii'] = (float(dc['NormalMinScale']), float(dc['NormalStep']), float(dc['NormalMaxScale']))

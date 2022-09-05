@@ -50,6 +50,8 @@ class Compare:
         self.diffs = {}     
         keys = ['X', 'Y', 'Z', 'NX', 'NY', 'NZ', 'Distance', 'LODetection']
 
+        self.nan_mode = []
+
         self.spread_set = False
         self.sample_set = False
 
@@ -115,6 +117,13 @@ class Compare:
         vec_calc = Vec_Calc()
 
         for i in range(0, self.size):
+            switch={'[False, False]': 0,
+                    '[False, True]': 1,
+                    '[True, False]': 2,
+                    '[True, True]': 3}
+            s = f"[{np.isnan(self.cl['dist'][i])}, {np.isnan(self.re['dist'][i])}]"
+            self.nan_mode.append(switch.get(s))
+
             self.diffs['X'][i] = self.sigDiff(x1, x2, i)
             self.diffs['Y'][i] = self.sigDiff(y1, y2, i)
             self.diffs['Z'][i] = self.sigDiff(z1, z2, i)
@@ -305,7 +314,7 @@ class Compare:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
             header = ['X Coord', 'Y Coord', 'Z Coord']
             header.extend(list(self.diffs.keys()))
-            header.extend(['Aspect', 'Slope'])
+            header.extend(['Aspect', 'Slope', 'Nan-Mode'])
             writer.writerow(header)
 
             x,y,z = self.reorder_list(self.re['pts'])
@@ -322,7 +331,7 @@ class Compare:
                         self.diffs['LODetection'][i]]
                 if self.spread_set: row.extend([self.diffs['Spread1'][i], self.diffs['Spread2'][i]])
                 if self.sample_set: row.extend([self.diffs['NumSamples1'][i], self.diffs['NumSamples2'][i]])
-                row.extend([self.aspects[i], self.slopes[i]])
+                row.extend([self.aspects[i], self.slopes[i], self.nan_mode[i]])
                 
                 writer.writerow(row)
 
@@ -360,14 +369,12 @@ def checkParams(skip):
 
     else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False
 
-def reorder(cloud, spread_set, sample_set):
+def reorder(cloud):
     '''
     Rearrange certain parameters.
 
     Parameters:
         cloud (numpy.ndarray): All the parameters of a the point cloud.
-        spread_set (bool): Are spread informations provided.
-        sample_set (bool): Are num_sample informations provided.
 
     Returns:
         tuple:
@@ -375,15 +382,16 @@ def reorder(cloud, spread_set, sample_set):
             - numpy.ndarray -- The spread information. 
             - numpy.ndarray -- The num_sample information.
     '''
+
     cl_normals = np.array([cloud[1]['NormalX'], cloud[1]['NormalY'], cloud[1]['NormalZ']])
     cl_normals = np.transpose(cl_normals)
 
-    if spread_set:
+    if 'STD_cloud1' in cloud[1]:
         cl_spread = (cloud[1]['STD_cloud1'], cloud[1]['STD_cloud2'])
     else: 
         cl_spread = None
 
-    if sample_set: 
+    if 'Npoints_cloud1' in cloud[1]:
         cl_num_samples = (cloud[1]['Npoints_cloud1'], cloud[1]['Npoints_cloud2'])
     else:
         cl_num_samples = None
@@ -396,7 +404,7 @@ def main():
     '''
     test = True # for debugging and developing use default parameters
     if len(sys.argv) > 1: test = False
-    skip = True # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
+    skip = False # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
 
     PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED = checkParams(test)  
     if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare' #default installation directory
@@ -416,7 +424,7 @@ def main():
             'spread_diff' : '/hist_diff_spread',
             'sample_diff' : '/hist_diff_sample'}
 
-    for out in OUTPUT.items(): OUTPUT[out[0]] = OUTPUT_DIR + out[1]
+    for out in OUTPUT.items(): OUTPUT[out[0]] = OUTPUT_DIR + out[1] # add output directory to string
 
     if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
 
@@ -439,13 +447,8 @@ def main():
     print('Read Py4dGeo file')
     cloud = fhandle.read_las(OUTPUT['py4d'], get_attributes=True)
 
-    if 'STD_cloud1' in reference[1]: spread_set = True
-    else: spread_set = False
-    if 'Npoints_cloud1' in reference[1]: sample_set = True
-    else: sample_set = False
-
-    re_normals, re_spread, re_num_samples = reorder(reference, spread_set, sample_set)
-    cl_normals, cl_spread, cl_num_samples = reorder(cloud, spread_set, sample_set)
+    re_normals, re_spread, re_num_samples = reorder(reference)
+    cl_normals, cl_spread, cl_num_samples = reorder(cloud)
 
     comp = Compare(reference[0], re_normals,
                     reference[1]['M3C2__distance'], 
