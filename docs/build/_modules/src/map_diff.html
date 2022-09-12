@@ -76,8 +76,15 @@
 <span class="sd">        title (str): The title of the plot.</span>
 <span class="sd">        size (int): The number of coordinates.</span>
 <span class="sd">        unit (str): The unit used for the axes</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        __init__(mapped_vals, coords, title=&#39;&#39;, unit=&#39;m&#39;)</span>
+<span class="sd">        subplot(vals, crds, ttl, ax, min, max, proj=&#39;2d&#39;)</span>
+<span class="sd">        plot(ax, min, max, proj=&#39;2d&#39;)</span>
+<span class="sd">        mapDiff(output=False, show=False, proj=&#39;2d&#39;)</span>
+<span class="sd">        compare(vals, crds, ttls, output=False, proj=&#39;2d&#39;, show=False)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapped_vals</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Map_Diff.__init__"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapped_vals</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        The constructor of the Map_Diff class.</span>
 
@@ -93,7 +100,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">coords</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="n">unit</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_size</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_size</span> <span class="o">=</span> <span class="mi">5</span></div>
 
 <div class="viewcode-block" id="Map_Diff.subplot"><a class="viewcode-back" href="../../src.html#src.map_diff.Map_Diff.subplot">[docs]</a>    <span class="k">def</span> <span class="nf">subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">crds</span><span class="p">,</span> <span class="n">ttl</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>

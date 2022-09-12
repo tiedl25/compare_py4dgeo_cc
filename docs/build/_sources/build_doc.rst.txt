@@ -1,0 +1,7 @@
+build\_doc module
+=================
+
+.. automodule:: build_doc
+   :members:
+   :undoc-members:
+   :show-inheritance:

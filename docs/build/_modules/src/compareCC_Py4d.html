@@ -88,8 +88,20 @@
 <span class="sd">        diffs (dict): The differences between between each related argument of both clouds -&gt; gets calculated in calc_differences()</span>
 <span class="sd">        aspects (numpy.array): The aspects between related normal vectors in both clouds.</span>
 <span class="sd">        slopes (numpy.array): The slopes between related normal vectors in both clouds.</span>
+<span class="sd">    </span>
+<span class="sd">    Methods:</span>
+<span class="sd">        __init__(re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod, re_spread=None, re_samples=None, cl_spread=None, cl_samples=None)</span>
+<span class="sd">        sigDiff(val1, val2, i=&quot;false&quot;, r=20)</span>
+<span class="sd">        reorder_list(li)</span>
+<span class="sd">        calc_differences()</span>
+<span class="sd">        mapDiff(path1, path2, proj=&#39;2d&#39;, advanced=False)</span>
+<span class="sd">        plotNormDiff(path)</span>
+<span class="sd">        plotSpreadDiff(path)</span>
+<span class="sd">        plotSampleDiff(path)</span>
+<span class="sd">        writeStatistics(path)</span>
+<span class="sd">        writeDiff(path)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_pts</span><span class="p">,</span> <span class="n">re_normals</span><span class="p">,</span> <span class="n">re_dist</span><span class="p">,</span> <span class="n">re_lod</span><span class="p">,</span> <span class="n">cl_pts</span><span class="p">,</span> <span class="n">cl_normals</span><span class="p">,</span> <span class="n">cl_dist</span><span class="p">,</span> <span class="n">cl_lod</span><span class="p">,</span> <span class="n">re_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">re_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Compare.__init__"><a class="viewcode-back" href="../../src.html#src.compareCC_Py4d.Compare.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_pts</span><span class="p">,</span> <span class="n">re_normals</span><span class="p">,</span> <span class="n">re_dist</span><span class="p">,</span> <span class="n">re_lod</span><span class="p">,</span> <span class="n">cl_pts</span><span class="p">,</span> <span class="n">cl_normals</span><span class="p">,</span> <span class="n">cl_dist</span><span class="p">,</span> <span class="n">cl_lod</span><span class="p">,</span> <span class="n">re_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">re_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        The class constructor, that initializes the attributes of the Compare class</span>
 
@@ -114,6 +126,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span> <span class="o">=</span> <span class="p">{}</span>     
         <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;NX&#39;</span><span class="p">,</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span> <span class="s1">&#39;NZ&#39;</span><span class="p">,</span> <span class="s1">&#39;Distance&#39;</span><span class="p">,</span> <span class="s1">&#39;LODetection&#39;</span><span class="p">]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">nan_mode</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">spread_set</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_set</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -137,7 +151,7 @@
         
 
         <span class="bp">self</span><span class="o">.</span><span class="n">slopes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Compare.sigDiff"><a class="viewcode-back" href="../../src.html#src.compareCC_Py4d.Compare.sigDiff">[docs]</a>    <span class="k">def</span> <span class="nf">sigDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -179,6 +193,13 @@
         <span class="n">vec_calc</span> <span class="o">=</span> <span class="n">Vec_Calc</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="n">switch</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;[False, False]&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;[False, True]&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;[True, False]&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="s1">&#39;[True, True]&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cl</span><span class="p">[</span><span class="s1">&#39;dist&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">re</span><span class="p">[</span><span class="s1">&#39;dist&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s2">]&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nan_mode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">switch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigDiff</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigDiff</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;Z&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigDiff</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
@@ -369,7 +390,7 @@
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">quotechar</span><span class="o">=</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_NONNUMERIC</span><span class="p">)</span>
             <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;X Coord&#39;</span><span class="p">,</span> <span class="s1">&#39;Y Coord&#39;</span><span class="p">,</span> <span class="s1">&#39;Z Coord&#39;</span><span class="p">]</span>
             <span class="n">header</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-            <span class="n">header</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;Aspect&#39;</span><span class="p">,</span> <span class="s1">&#39;Slope&#39;</span><span class="p">])</span>
+            <span class="n">header</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;Aspect&#39;</span><span class="p">,</span> <span class="s1">&#39;Slope&#39;</span><span class="p">,</span> <span class="s1">&#39;Nan-Mode&#39;</span><span class="p">])</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
             <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">re</span><span class="p">[</span><span class="s1">&#39;pts&#39;</span><span class="p">])</span>
@@ -386,7 +407,7 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;LODetection&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spread_set</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;Spread1&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;Spread2&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]])</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_set</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;NumSamples1&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffs</span><span class="p">[</span><span class="s1">&#39;NumSamples2&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]])</span>
-                <span class="n">row</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">slopes</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+                <span class="n">row</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">slopes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nan_mode</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
                 
                 <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></div></div>
 
@@ -424,14 +445,12 @@
 
     <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="s1">&#39;data/test1.xyz&#39;</span><span class="p">,</span> <span class="s1">&#39;data/test2.xyz&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="s1">&#39;m3c2_params.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;2d&#39;</span><span class="p">,</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="reorder"><a class="viewcode-back" href="../../src.html#src.compareCC_Py4d.reorder">[docs]</a><span class="k">def</span> <span class="nf">reorder</span><span class="p">(</span><span class="n">cloud</span><span class="p">,</span> <span class="n">spread_set</span><span class="p">,</span> <span class="n">sample_set</span><span class="p">):</span>
+<div class="viewcode-block" id="reorder"><a class="viewcode-back" href="../../src.html#src.compareCC_Py4d.reorder">[docs]</a><span class="k">def</span> <span class="nf">reorder</span><span class="p">(</span><span class="n">cloud</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Rearrange certain parameters.</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        cloud (numpy.ndarray): All the parameters of a the point cloud.</span>
-<span class="sd">        spread_set (bool): Are spread informations provided.</span>
-<span class="sd">        sample_set (bool): Are num_sample informations provided.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple:</span>
@@ -439,15 +458,16 @@
 <span class="sd">            - numpy.ndarray -- The spread information. </span>
 <span class="sd">            - numpy.ndarray -- The num_sample information.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="n">cl_normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;NormalX&#39;</span><span class="p">],</span> <span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;NormalY&#39;</span><span class="p">],</span> <span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;NormalZ&#39;</span><span class="p">]])</span>
     <span class="n">cl_normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">cl_normals</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">spread_set</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;STD_cloud1&#39;</span> <span class="ow">in</span> <span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="n">cl_spread</span> <span class="o">=</span> <span class="p">(</span><span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;STD_cloud1&#39;</span><span class="p">],</span> <span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;STD_cloud2&#39;</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span> 
         <span class="n">cl_spread</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">if</span> <span class="n">sample_set</span><span class="p">:</span> 
+    <span class="k">if</span> <span class="s1">&#39;Npoints_cloud1&#39;</span> <span class="ow">in</span> <span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="n">cl_num_samples</span> <span class="o">=</span> <span class="p">(</span><span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Npoints_cloud1&#39;</span><span class="p">],</span> <span class="n">cloud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Npoints_cloud2&#39;</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">cl_num_samples</span> <span class="o">=</span> <span class="kc">None</span>
@@ -460,11 +480,15 @@
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">test</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># for debugging and developing use default parameters</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="n">test</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist</span>
+    <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist</span>
 
     <span class="n">PATH_CLOUD1</span><span class="p">,</span> <span class="n">PATH_CLOUD2</span><span class="p">,</span> <span class="n">PATH_COREPTS</span><span class="p">,</span> <span class="n">OUTPUT_DIR</span><span class="p">,</span> <span class="n">PARAMS</span><span class="p">,</span> <span class="n">PROJECTION</span><span class="p">,</span> <span class="n">ADVANCED</span> <span class="o">=</span> <span class="n">checkParams</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>  
-    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span> <span class="n">CC_BIN</span> <span class="o">=</span> <span class="s1">&#39;C:/Programme/CloudCompare/CloudCompare&#39;</span>
-    <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span> <span class="n">CC_BIN</span> <span class="o">=</span> <span class="s1">&#39;org.cloudcompare.CloudCompare&#39;</span>
+    <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Windows&#39;</span><span class="p">:</span> <span class="n">CC_BIN</span> <span class="o">=</span> <span class="s1">&#39;C:/Programme/CloudCompare/CloudCompare&#39;</span> <span class="c1">#default installation directory</span>
+    <span class="k">elif</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span class="p">:</span> <span class="n">CC_BIN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;which cloudcompare&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">CC_BIN</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CloudCompare Binary not found&#39;</span><span class="p">)</span>
+        <span class="n">quit</span><span class="p">()</span>
 
     <span class="n">OUTPUT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cc&#39;</span> <span class="p">:</span> <span class="s1">&#39;/CC_Output.laz&#39;</span><span class="p">,</span> 
             <span class="s1">&#39;py4d&#39;</span> <span class="p">:</span> <span class="s1">&#39;/Py4dGeo_Output.laz&#39;</span><span class="p">,</span> 
@@ -476,7 +500,7 @@
             <span class="s1">&#39;spread_diff&#39;</span> <span class="p">:</span> <span class="s1">&#39;/hist_diff_spread&#39;</span><span class="p">,</span>
             <span class="s1">&#39;sample_diff&#39;</span> <span class="p">:</span> <span class="s1">&#39;/hist_diff_sample&#39;</span><span class="p">}</span>
 
-    <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">OUTPUT</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="n">OUTPUT</span><span class="p">[</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">OUTPUT_DIR</span> <span class="o">+</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">OUTPUT</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="n">OUTPUT</span><span class="p">[</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">OUTPUT_DIR</span> <span class="o">+</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># add output directory to string</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">OUTPUT_DIR</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">OUTPUT_DIR</span><span class="p">)</span>
 
@@ -499,13 +523,8 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Read Py4dGeo file&#39;</span><span class="p">)</span>
     <span class="n">cloud</span> <span class="o">=</span> <span class="n">fhandle</span><span class="o">.</span><span class="n">read_las</span><span class="p">(</span><span class="n">OUTPUT</span><span class="p">[</span><span class="s1">&#39;py4d&#39;</span><span class="p">],</span> <span class="n">get_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s1">&#39;STD_cloud1&#39;</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">spread_set</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">else</span><span class="p">:</span> <span class="n">spread_set</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="s1">&#39;Npoints_cloud1&#39;</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">sample_set</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">else</span><span class="p">:</span> <span class="n">sample_set</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="n">re_normals</span><span class="p">,</span> <span class="n">re_spread</span><span class="p">,</span> <span class="n">re_num_samples</span> <span class="o">=</span> <span class="n">reorder</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">spread_set</span><span class="p">,</span> <span class="n">sample_set</span><span class="p">)</span>
-    <span class="n">cl_normals</span><span class="p">,</span> <span class="n">cl_spread</span><span class="p">,</span> <span class="n">cl_num_samples</span> <span class="o">=</span> <span class="n">reorder</span><span class="p">(</span><span class="n">cloud</span><span class="p">,</span> <span class="n">spread_set</span><span class="p">,</span> <span class="n">sample_set</span><span class="p">)</span>
+    <span class="n">re_normals</span><span class="p">,</span> <span class="n">re_spread</span><span class="p">,</span> <span class="n">re_num_samples</span> <span class="o">=</span> <span class="n">reorder</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="n">cl_normals</span><span class="p">,</span> <span class="n">cl_spread</span><span class="p">,</span> <span class="n">cl_num_samples</span> <span class="o">=</span> <span class="n">reorder</span><span class="p">(</span><span class="n">cloud</span><span class="p">)</span>
 
     <span class="n">comp</span> <span class="o">=</span> <span class="n">Compare</span><span class="p">(</span><span class="n">reference</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">re_normals</span><span class="p">,</span>
                     <span class="n">reference</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;M3C2__distance&#39;</span><span class="p">],</span> 
