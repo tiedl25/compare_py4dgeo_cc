@@ -16,15 +16,6 @@ class Py4d_M3C2:
         output_path (str): The name and path for the output file.
         params (str/dict): Either the path to a CC params file or a dictionary of params
         corepoints: Either the pointcloud from a separate corepoint file or a subsampled version of the first point cloud.
-
-    Methods:
-        __init__(path1, path2, corepoint_path=False, output_path=False, params=False, compr=1)
-        mapDiff(path1, path2, proj='2d')
-        write(cc_mode=True)
-        read_cc_params()
-        read(*path, other_epoch=None, **parse_opts)
-        read_with_magic(*path, other_epoch=None, **parse_opts)
-        run()
     '''
     def __init__(self, path1, path2, corepoint_path=False, output_path=False, params=False, compr=1):
         '''

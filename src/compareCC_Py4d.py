@@ -24,18 +24,6 @@ class Compare:
         diffs (dict): The differences between between each related argument of both clouds -> gets calculated in calc_differences()
         aspects (numpy.array): The aspects between related normal vectors in both clouds.
         slopes (numpy.array): The slopes between related normal vectors in both clouds.
-    
-    Methods:
-        __init__(re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod, re_spread=None, re_samples=None, cl_spread=None, cl_samples=None)
-        sigDiff(val1, val2, i="false", r=20)
-        reorder_list(li)
-        calc_differences()
-        mapDiff(path1, path2, proj='2d', advanced=False)
-        plotNormDiff(path)
-        plotSpreadDiff(path)
-        plotSampleDiff(path)
-        writeStatistics(path)
-        writeDiff(path)
     '''
     def __init__(self, re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod, re_spread=None, re_samples=None, cl_spread=None, cl_samples=None):
         '''

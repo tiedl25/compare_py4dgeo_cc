@@ -11,14 +11,7 @@ class Map_Diff:
         coords (numpy.ndarray): The points to be plotted. 
         title (str): The title of the plot.
         size (int): The number of coordinates.
-        unit (str): The unit used for the axes
-
-    Methods:
-        __init__(mapped_vals, coords, title='', unit='m')
-        subplot(vals, crds, ttl, ax, min, max, proj='2d')
-        plot(ax, min, max, proj='2d')
-        mapDiff(output=False, show=False, proj='2d')
-        compare(vals, crds, ttls, output=False, proj='2d', show=False)
+        unit (str): The unit used for the axes.
     '''
     def __init__(self, mapped_vals, coords, title='', unit='m'):
         '''

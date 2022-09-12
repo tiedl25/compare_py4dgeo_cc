@@ -3,16 +3,6 @@ import numpy as np
 class Vec_Calc:
     '''
     A class for performing different calculations on Vectors.
-
-    Attributes:
-
-    Methods:
-        __init__()
-        getAngle(v1, v2)
-        rotate(v1, v2, norm, angl)
-        transform(v1, v2)
-        getAspect(normal)
-        getSlope(normal)
     '''
     def __init__(self) -> None:
         pass
