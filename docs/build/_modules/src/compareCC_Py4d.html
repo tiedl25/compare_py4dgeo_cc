@@ -88,20 +88,8 @@
 <span class="sd">        diffs (dict): The differences between between each related argument of both clouds -&gt; gets calculated in calc_differences()</span>
 <span class="sd">        aspects (numpy.array): The aspects between related normal vectors in both clouds.</span>
 <span class="sd">        slopes (numpy.array): The slopes between related normal vectors in both clouds.</span>
-<span class="sd">    </span>
-<span class="sd">    Methods:</span>
-<span class="sd">        __init__(re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod, re_spread=None, re_samples=None, cl_spread=None, cl_samples=None)</span>
-<span class="sd">        sigDiff(val1, val2, i=&quot;false&quot;, r=20)</span>
-<span class="sd">        reorder_list(li)</span>
-<span class="sd">        calc_differences()</span>
-<span class="sd">        mapDiff(path1, path2, proj=&#39;2d&#39;, advanced=False)</span>
-<span class="sd">        plotNormDiff(path)</span>
-<span class="sd">        plotSpreadDiff(path)</span>
-<span class="sd">        plotSampleDiff(path)</span>
-<span class="sd">        writeStatistics(path)</span>
-<span class="sd">        writeDiff(path)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-<div class="viewcode-block" id="Compare.__init__"><a class="viewcode-back" href="../../src.html#src.compareCC_Py4d.Compare.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_pts</span><span class="p">,</span> <span class="n">re_normals</span><span class="p">,</span> <span class="n">re_dist</span><span class="p">,</span> <span class="n">re_lod</span><span class="p">,</span> <span class="n">cl_pts</span><span class="p">,</span> <span class="n">cl_normals</span><span class="p">,</span> <span class="n">cl_dist</span><span class="p">,</span> <span class="n">cl_lod</span><span class="p">,</span> <span class="n">re_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">re_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_pts</span><span class="p">,</span> <span class="n">re_normals</span><span class="p">,</span> <span class="n">re_dist</span><span class="p">,</span> <span class="n">re_lod</span><span class="p">,</span> <span class="n">cl_pts</span><span class="p">,</span> <span class="n">cl_normals</span><span class="p">,</span> <span class="n">cl_dist</span><span class="p">,</span> <span class="n">cl_lod</span><span class="p">,</span> <span class="n">re_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">re_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_spread</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cl_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        The class constructor, that initializes the attributes of the Compare class</span>
 
@@ -151,7 +139,7 @@
         
 
         <span class="bp">self</span><span class="o">.</span><span class="n">slopes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Compare.sigDiff"><a class="viewcode-back" href="../../src.html#src.compareCC_Py4d.Compare.sigDiff">[docs]</a>    <span class="k">def</span> <span class="nf">sigDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val1</span><span class="p">,</span> <span class="n">val2</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="s2">&quot;false&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>

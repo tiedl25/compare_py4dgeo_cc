@@ -80,17 +80,8 @@
 <span class="sd">        output_path (str): The name and path for the output file.</span>
 <span class="sd">        params (str/dict): Either the path to a CC params file or a dictionary of params</span>
 <span class="sd">        corepoints: Either the pointcloud from a separate corepoint file or a subsampled version of the first point cloud.</span>
-
-<span class="sd">    Methods:</span>
-<span class="sd">        __init__(path1, path2, corepoint_path=False, output_path=False, params=False, compr=1)</span>
-<span class="sd">        mapDiff(path1, path2, proj=&#39;2d&#39;)</span>
-<span class="sd">        write(cc_mode=True)</span>
-<span class="sd">        read_cc_params()</span>
-<span class="sd">        read(*path, other_epoch=None, **parse_opts)</span>
-<span class="sd">        read_with_magic(*path, other_epoch=None, **parse_opts)</span>
-<span class="sd">        run()</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-<div class="viewcode-block" id="Py4d_M3C2.__init__"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">corepoint_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compr</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">corepoint_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compr</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        The class constructor.</span>
 
@@ -117,7 +108,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cyl_radii&quot;</span><span class="p">:(</span><span class="mf">0.5</span><span class="p">,),</span> <span class="s2">&quot;normal_radii&quot;</span><span class="p">:(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">),</span><span class="s2">&quot;max_distance&quot;</span><span class="p">:(</span><span class="mi">15</span><span class="p">),</span><span class="s2">&quot;registration_error&quot;</span><span class="p">:(</span><span class="mf">0.0024</span><span class="p">)}</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">read_cc_params</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_cc_params</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Py4d_M3C2.mapDiff"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.mapDiff">[docs]</a>    <span class="k">def</span> <span class="nf">mapDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
