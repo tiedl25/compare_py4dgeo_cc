@@ -29,9 +29,9 @@ class Map_Diff:
         self.coords = coords
         self.size = int(np.size(coords/3))
         self.unit = unit
-        self.point_size = 5
+        self.point_size = 1
 
-    def subplot(self, vals, crds, ttl, ax, min, max, proj='2d'):
+    def plot(self, crds, vals, ttl, ax, min, max, proj='2d'):
         '''
         Draw given coordinates in a Subplot.
 
@@ -50,7 +50,7 @@ class Map_Diff:
 
         x,y,z = crds[0:,0], crds[0:,1], crds[0:,2] #returns X,Y,Z coordinates
 
-        pointColors = abs(vals)/max
+        pointColors = [(i/max if i >=0 else -i/min) for i in vals]
 
         ax.title.set_text(ttl)    
 
@@ -59,8 +59,10 @@ class Map_Diff:
             ax.set_aspect(aspect=1)
             
             #draw points
-            pts = ax.scatter(x,y,s=self.point_size, c=pointColors, cmap='YlGnBu')
+            pts = ax.scatter(x,y,s=self.point_size, c=pointColors, cmap='YlGnBu', vmin=min, vmax=max)
         elif proj=='3d':
+            ax.set_zlabel('Z Axis')
+
             #set viewport 
             ax.view_init(22, 112) 
 
@@ -68,50 +70,7 @@ class Map_Diff:
             ax.set_box_aspect((np.ptp(x), np.ptp(y), np.ptp(z)))
 
             #draw points
-            pts = ax.scatter3D(x,y,z,s=self.point_size, c=pointColors, cmap='YlGnBu')
-            ax.zaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f ' + self.unit))
-
-        # set units for the x and y axes
-        ax.xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f ' + self.unit))
-        ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f ' + self.unit))
-        #ax.yaxis.set_ticklabels([]) #remove ticks for the y-axis
-
-        return pts
-
-    def plot(self, ax, min, max, proj='2d'):
-        '''
-        Draw the coordinates in the plot
-
-        Parameters:
-            self (Compare): The object itself.
-            ax (matplotlib.axes._subplots.AxesSubplot): The Axes.
-            max (float): The maximum of the mapped values.
-            min (float): The minimum of the mapped values. 
-            proj (str): Specifies if the plot is 2d or 3d.
-        '''
-        ax.set_xlabel('X Axis')
-        ax.set_ylabel('Y Axis')
-        x,y,z = self.coords[0:,0], self.coords[0:,1], self.coords[0:,2] #returns X,Y,Z coordinates
-
-        pointColors = abs(self.mapped_vals)/max
-
-        ax.title.set_text(self.title)
-
-        if proj=='2d':        
-            # set x and y scale equal
-            ax.set_aspect(aspect=1)
-            
-            #draw points
-            pts = ax.scatter(x,y,s=self.point_size, c=pointColors, cmap='YlGnBu')
-        elif proj=='3d':
-            #set viewport 
-            ax.view_init(22, 112) 
-
-            # set x, y and z scale equal
-            ax.set_box_aspect((np.ptp(x), np.ptp(y), np.ptp(z)))
-
-            #draw points
-            pts = ax.scatter3D(x,y,z,s=self.point_size, c=pointColors, cmap='YlGnBu')
+            pts = ax.scatter3D(x,y,z,s=self.point_size, c=pointColors, cmap='YlGnBu', vmin=min, vmax=max)
             ax.zaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f ' + self.unit))
 
         # set units for the x and y axes
@@ -139,20 +98,20 @@ class Map_Diff:
 
         ax.set_xlabel('X Axis')
         ax.set_ylabel('Y Axis')
-        if proj=='2d':
-            plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right') #rotate x-ticklabels to prevent overlapping
-            pts = self.plot(ax, min, max, '2d')
-        elif proj=='3d':
-            ax.set_zlabel('Z Axis')
-            pts = self.plot(ax, min, max, '3d')
+
+        if proj=='2d': plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right') #rotate x-ticklabels to prevent overlapping
+        elif proj=='3d': ax.set_zlabel('Z Axis')
         else: 
             print('Not a valid projection')
             return
+
+        pts = self.plot(self.coords, self.mapped_vals, self.title, ax, min, max, proj) 
+
         #set color bar with individual ticks and labels
-        cbar = plt.colorbar(pts)
-        ticks = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+        cbar = plt.colorbar(pts, format=('%.3f ' + self.unit))       
+        pos = [-1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+        ticks = [(max*i if i >=0 else -min*i) for i in pos]
         cbar.set_ticks(ticks)
-        cbar.set_ticklabels([str(s) + ' ' + self.unit for s in np.round([max*i for i in ticks], 3)])
 
         if show: plt.show()
         if output: fig.savefig(output)
@@ -171,39 +130,32 @@ class Map_Diff:
             show (bool): Specifies if the plot is shown or not.
             proj (str): Specifies if the plot is 2d or 3d.
         '''
-        dim = len(vals)
-        fig, ax = plt.subplots(1, dim+1, subplot_kw={'projection' : None if proj=='2d' else proj}, figsize=(15,7), constrained_layout=True) # create as many subplots as big the dimension is
+        fig, ax = plt.subplots(1, 3, subplot_kw={'projection' : None if proj=='2d' else proj}, figsize=(15,7), constrained_layout=True)
+
+        all_vals = self.mapped_vals
+        all_vals = np.append(all_vals, vals[0])
+        all_vals = np.append(all_vals, vals[1])
+
+        max = np.nanmax(all_vals)
+        min = np.nanmin(all_vals)
+
+        x=y=c=0
+        pts = ax[0].scatter(x,y,s=self.point_size, c=c, vmin=min, vmax=max, cmap='YlGnBu')
+        ax[0].clear()
+
+        # create subplots
+        self.plot(self.coords, self.mapped_vals, self.title, ax[0], min, max, proj)
+        self.plot(crds[0], vals[0], ttls[0], ax[1], min, max, proj)
+        self.plot(crds[1], vals[1], ttls[1], ax[2], min, max, proj)
+        
+        #set color bar with individual ticks and labels
+        cbar = plt.colorbar(pts, ax=ax, orientation='horizontal', format=('%.3f ' + self.unit))       
+        pos = [-1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+        ticks = [(max*i if i >=0 else -min*i) for i in pos]
+        cbar.set_ticks(ticks)
 
         if proj=='2d': 
             for a in ax: plt.setp(a.get_xticklabels(), rotation=30, horizontalalignment='right') #rotate x-ticklabels to prevent overlapping
-            
-        #get max value of all mapped values to determine maximum of colorbar
-        highest = 0
-        max = np.nanmax(self.mapped_vals)
-        min = np.nanmin(self.mapped_vals)
-        for i in range(0, dim):
-            new_max = np.nanmax(vals[i])
-            new_min = np.nanmin(vals[i])
-            if new_max > max: 
-                max = new_max
-                highest = i+1
-            if new_min < min:
-                min = new_min
-        if min < 0: min = 0
-        # create subplots
-        pts = np.empty(dim+1, dtype=object)
-        pts[0] = self.plot(ax[0], min, max, proj)
-        for pt in range(0,dim):
-            pts[pt+1] = self.subplot(vals[pt], crds[pt], ttls[pt], ax[pt+1], min, max, proj)
-
-        # set minimum of colorbar
-        pts[highest].set_clim(min)
-        
-        #set color bar with individual ticks and labels
-        cbar = plt.colorbar(pts[highest], ax=ax, orientation='horizontal')
-        ticks = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        cbar.set_ticks(ticks)
-        cbar.set_ticklabels([str(s) + ' ' + self.unit for s in np.round([max*i for i in ticks], 3)])
 
         if show: plt.show()
         if output: fig.savefig(output)

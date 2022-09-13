@@ -77,7 +77,7 @@ class Compare:
         self.slopes = np.empty(self.size, dtype=object)
         self.aspects = np.empty(self.size, dtype=object)
 
-    def sigDiff(self, val1, val2, i="false", r=20):
+    def sigDiff(self, val1, val2, i=None, r=20):
         '''
         Determine if the difference between two values is significant or not.
 
@@ -91,8 +91,8 @@ class Compare:
         Returns:
             float: The significant difference.
         '''
-        if i != "false": return 0 if round(abs(val1[i]-val2[i]),r) == 0 or None else abs(val1[i]-val2[i])
-        return 0 if round(abs(val1-val2),r) == 0 or None else abs(val1-val2)
+        if i != None: return 0 if round(val1[i]-val2[i],r) == 0 or None else val1[i]-val2[i]
+        return 0 if round(val1-val2,r) == 0 or None else val1-val2
 
     def reorder_list(self, li):
         '''Reorder a list by columns instead of rows.'''
@@ -121,6 +121,7 @@ class Compare:
                     '[False, True]': 1,
                     '[True, False]': 2,
                     '[True, True]': 3}
+
             s = f"[{np.isnan(self.cl['dist'][i])}, {np.isnan(self.re['dist'][i])}]"
             self.nan_mode.append(switch.get(s))
 
@@ -132,6 +133,7 @@ class Compare:
             self.diffs['NZ'][i] = self.sigDiff(nz1, nz2, i)
             self.diffs['Distance'][i] = self.sigDiff(self.cl['dist'], self.re['dist'], i)
             self.diffs['LODetection'][i] = self.sigDiff(self.cl['lod'], self.re['lod'], i)
+
             if self.spread_set == True:
                 self.diffs['Spread1'][i] = self.sigDiff(self.cl['spread'][0], self.re['spread'][0], i)
                 self.diffs['Spread2'][i] = self.sigDiff(self.cl['spread'][1], self.re['spread'][1], i)
@@ -186,6 +188,7 @@ class Compare:
         plt.ylabel('Slope', rotation=0)
         ax.yaxis.set_label_coords(1, 0.75)
         ax.yaxis.set_offset_position('right')
+        ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
         # set units for the x and y axes
         #plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
         #plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
@@ -404,7 +407,7 @@ def main():
     '''
     test = True # for debugging and developing use default parameters
     if len(sys.argv) > 1: test = False
-    skip = False # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
+    skip = True # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
 
     PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED = checkParams(test)  
     if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare' #default installation directory
