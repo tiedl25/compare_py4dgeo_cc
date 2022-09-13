@@ -74,7 +74,7 @@ def reorder(cloud):
 if __name__ == '__main__':
     test = True # for debugging and developing use default parameters
     if len(sys.argv) > 1: test = False
-    skip = False # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
+    skip = True # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
 
     PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED = checkParams(test)  
     if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare' #default installation directory
@@ -125,15 +125,13 @@ if __name__ == '__main__':
                     reference[1]['distance__uncertainty'], 
                     cloud[0], cl_normals, 
                     cloud[1]['M3C2__distance'], 
-                    cloud[1]['distance__uncertainty'], 
-                    re_spread, re_num_samples,
-                    cl_spread, cl_num_samples)
-
+                    cloud[1]['distance__uncertainty'])
+    
     comp.calc_differences()
     comp.plotNormDiff(OUTPUT['normal_diff'])
     comp.mapDiff(OUTPUT['distance_diff'], OUTPUT['lod_diff'], PROJECTION, ADVANCED)
-    comp.plotSpreadDiff(OUTPUT['spread_diff'])
-    comp.plotSampleDiff(OUTPUT['sample_diff'])
+    #comp.spreadDiff(re_spread, cl_spread, OUTPUT['spread_diff'], plot=True)
+    comp.sampleDiff(re_num_samples, cl_num_samples, OUTPUT['sample_diff'], plot=True)
     comp.writeStatistics(OUTPUT['stats'])
     comp.writeDiff(OUTPUT['diffs'])
 

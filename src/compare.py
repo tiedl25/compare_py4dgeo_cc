@@ -19,7 +19,7 @@ class Compare:
         aspects (numpy.array): The aspects between related normal vectors in both clouds.
         slopes (numpy.array): The slopes between related normal vectors in both clouds.
     '''
-    def __init__(self, re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod, re_spread=None, re_samples=None, cl_spread=None, cl_samples=None):
+    def __init__(self, re_pts, re_normals, re_dist, re_lod, cl_pts, cl_normals, cl_dist, cl_lod):
         '''
         The class constructor, that initializes the attributes of the Compare class
 
@@ -42,31 +42,10 @@ class Compare:
         self.cl = {'pts': cl_pts, 'dist' : cl_dist, 'lod' : cl_lod, 'normals' : cl_normals}
 
         self.diffs = {}     
-        keys = ['X', 'Y', 'Z', 'NX', 'NY', 'NZ', 'Distance', 'LODetection']
-
         self.nan_mode = []
 
-        self.spread_set = False
-        self.sample_set = False
-
-        if re_spread != None:
-            self.re.update({'spread' : re_spread})
-            self.cl.update({'spread' : cl_spread})
-            keys.extend(['Spread1', 'Spread2'])
-            self.spread_set = True
-            
-        if re_samples != None:
-            self.re.update({'num_samples' : re_samples})
-            self.cl.update({'num_samples' : cl_samples})
-            keys.extend(['NumSamples1', 'NumSamples2'])
-            self.sample_set = True
-
-        self.size = int(np.size(re_pts)/3)
-
-        for i in range(0, len(keys)):
-                        self.diffs[keys[i]] = np.empty(self.size, dtype=object)
-
-        
+        self.size = int(np.size(re_dist))
+        self.calc = False
 
         self.slopes = np.empty(self.size, dtype=object)
         self.aspects = np.empty(self.size, dtype=object)
@@ -81,6 +60,8 @@ class Compare:
         Returns:
             dict: The differences between each related argument of both point clouds
         '''
+        self.calc = True
+
         x1,y1,z1 = np.transpose(self.cl['pts'])
         x2,y2,z2 = np.transpose(self.re['pts'])
 
@@ -95,13 +76,6 @@ class Compare:
         self.diffs['NZ'] = abs(nz1-nz2)
         self.diffs['Distance'] = abs(self.cl['dist']-self.re['dist'])
         self.diffs['LODetection'] = abs(self.cl['lod']-self.re['lod'])
-
-        if self.spread_set == True:
-            self.diffs['Spread1'] = abs(self.cl['spread'][0]-self.re['spread'][0])
-            self.diffs['Spread2'] = abs(self.cl['spread'][1]-self.re['spread'][1])
-        if self.sample_set == True:
-            self.diffs['NumSamples1'] = abs(self.cl['num_samples'][0]-self.re['num_samples'][0])
-            self.diffs['NumSamples2'] = abs(self.cl['num_samples'][1]-self.re['num_samples'][1])
 
         # (cloud is nan, reference is nan)
         switch={'(False, False)': 0,
@@ -130,6 +104,10 @@ class Compare:
             proj (str): Specifies whether the plot is plotted in 2d or 3d.
             advanced (bool): Specifies whether the differences gets plotted in comparison to the CC and Py4dGeo Distances/LODetection or just alone.
         '''
+        if not self.calc: 
+            print('There is nothing to plot. You have to call calc_differences first.')
+            return
+
         map1 = Map_Diff(self.diffs['Distance'], self.re['pts'], "Difference in distance between CC and Py4dGeo")
         map2 = Map_Diff(self.diffs['LODetection'], self.re['pts'], "Difference in lodetection between CC and Py4dGeo")
 
@@ -151,6 +129,10 @@ class Compare:
             self (Compare): The object itself.
             path (str): The output path for the normal plot.
         '''
+        if not self.calc: 
+            print('There is nothing to plot. You have to call calc_differences first.')
+            return
+
         print('Plot normal differences of the normal vectors')
 
         #setup the plot
@@ -168,7 +150,7 @@ class Compare:
         plt.savefig(path)
         plt.close()
 
-    def plotSpreadDiff(self, path):
+    def spreadDiff(self, re_spread, cl_spread, path, plot=False):
         '''
         Plot standard deviation differences between both point clouds.
 
@@ -176,35 +158,38 @@ class Compare:
             self (Compare): The object itself.
             path (str): The output path for the spread plot.
         '''
-        if not self.spread_set:
-            print('No spread information')
-            return
+        self.re.update({'spread' : re_spread})
+        self.cl.update({'spread' : cl_spread})
 
-        print('Plot spread differences')
+        self.diffs['Spread1'] = abs(self.cl['spread'][0]-self.re['spread'][0])
+        self.diffs['Spread2'] = abs(self.cl['spread'][1]-self.re['spread'][1])
 
-        titles = ('Spread1', 'Spread2')
+        if plot:
+            print('Plot spread differences')
 
-        plt.xlabel('Difference')
-        plt.ylabel('Number of points')
+            titles = ('Spread1', 'Spread2')
 
-        plt.subplot(1,2,1)
-        li = [x for x in self.diffs['Spread1'] if np.isnan(x) == False]
-        plt.hist(li, bins=50)
-        plt.title(titles[0])
-        # set units for the x and y axes
-        plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
+            plt.xlabel('Difference')
+            plt.ylabel('Number of points')
 
-        plt.subplot(1,2,2)
-        li = [x for x in self.diffs['Spread2'] if np.isnan(x) == False]
-        plt.hist(li, bins=50)
-        plt.title(titles[1])
-        # set units for the x and y axes
-        plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
+            plt.subplot(1,2,1)
+            li = [x for x in self.diffs['Spread1'] if np.isnan(x) == False]
+            plt.hist(li, bins=50)
+            plt.title(titles[0])
+            # set units for the x and y axes
+            plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
 
-        plt.savefig(path)
-        plt.close()
+            plt.subplot(1,2,2)
+            li = [x for x in self.diffs['Spread2'] if np.isnan(x) == False]
+            plt.hist(li, bins=50)
+            plt.title(titles[1])
+            # set units for the x and y axes
+            plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
 
-    def plotSampleDiff(self, path):
+            plt.savefig(path)
+            plt.close()
+
+    def sampleDiff(self, re_samples, cl_samples, path, plot=False):
         '''
         Plot point density differences between both point clouds.
 
@@ -212,29 +197,32 @@ class Compare:
             self (Compare): The object itself.
             path (str): The output path for the spread plot.
         '''
-        if not self.sample_set:
-            print('No num_sample information')
-            return
+        self.re.update({'num_samples' : re_samples})
+        self.cl.update({'num_samples' : cl_samples})
 
-        print('Plot num_sample differences')
+        self.diffs['NumSamples1'] = abs(self.cl['num_samples'][0]-self.re['num_samples'][0])
+        self.diffs['NumSamples2'] = abs(self.cl['num_samples'][1]-self.re['num_samples'][1])
 
-        titles = ('num_samples1', 'num_samples2')
+        if plot:
+            print('Plot num_sample differences')
 
-        plt.xlabel('Difference')
-        plt.ylabel('Number of points')
+            titles = ('num_samples1', 'num_samples2')
 
-        plt.subplot(1,2,1)
-        li = [x for x in self.diffs['NumSamples1'] if np.isnan(x) == False]
-        plt.hist(li, bins=50)
-        plt.title(titles[0])
+            plt.xlabel('Difference')
+            plt.ylabel('Number of points')
 
-        plt.subplot(1,2,2)
-        li = [x for x in self.diffs['NumSamples2'] if np.isnan(x) == False]
-        plt.hist(li, bins=50)
-        plt.title(titles[1])
+            plt.subplot(1,2,1)
+            li = [x for x in self.diffs['NumSamples1'] if np.isnan(x) == False]
+            plt.hist(li, bins=50)
+            plt.title(titles[0])
 
-        plt.savefig(path)
-        plt.close()      
+            plt.subplot(1,2,2)
+            li = [x for x in self.diffs['NumSamples2'] if np.isnan(x) == False]
+            plt.hist(li, bins=50)
+            plt.title(titles[1])
+
+            plt.savefig(path)
+            plt.close()      
 
     def writeStatistics(self, path):
         '''
@@ -244,6 +232,10 @@ class Compare:
             self (Compare): The object itself.
             path (str): The output path for the csv file.
         '''
+        if not self.calc: 
+            print('There is nothing to write. You have to call calc_differences first.')
+            return
+
         s = len(self.diffs)+3
         mean = np.empty(s, dtype=object)
         median = np.empty(s, dtype=object)
@@ -285,6 +277,10 @@ class Compare:
             self (Compare): The object itself.
             path (str): The output path for the csv file.
         '''
+        if not self.calc: 
+            print('There is nothing to write. You have to call calc_differences first.')
+            return
+
         with open(path, mode='w') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
             header = ['X Coord', 'Y Coord', 'Z Coord']
@@ -293,6 +289,9 @@ class Compare:
             writer.writerow(header)
 
             x,y,z = np.transpose(self.re['pts'])
+
+            spread_set=True if 'Spread1' in self.diffs else False
+            sample_set=True if 'NumSamples1' in self.diffs else False
 
             for i in range(0, self.size):
                 row = [x[i], y[i], z[i],
@@ -304,8 +303,8 @@ class Compare:
                         self.diffs['NZ'][i],
                         self.diffs['Distance'][i],
                         self.diffs['LODetection'][i]]
-                if self.spread_set: row.extend([self.diffs['Spread1'][i], self.diffs['Spread2'][i]])
-                if self.sample_set: row.extend([self.diffs['NumSamples1'][i], self.diffs['NumSamples2'][i]])
+                if spread_set: row.extend([self.diffs['Spread1'][i], self.diffs['Spread2'][i]])
+                if sample_set: row.extend([self.diffs['NumSamples1'][i], self.diffs['NumSamples2'][i]])
                 row.extend([self.aspects[i], self.slopes[i], self.nan_mode[i]])
                 
                 writer.writerow(row)
