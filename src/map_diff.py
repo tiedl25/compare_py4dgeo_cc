@@ -50,8 +50,6 @@ class Map_Diff:
 
         x,y,z = crds[0:,0], crds[0:,1], crds[0:,2] #returns X,Y,Z coordinates
 
-        pointColors = [(i/max if i >=0 else -i/min) for i in vals]
-
         ax.title.set_text(ttl)    
 
         if proj=='2d':
@@ -59,7 +57,7 @@ class Map_Diff:
             ax.set_aspect(aspect=1)
             
             #draw points
-            pts = ax.scatter(x,y,s=self.point_size, c=pointColors, cmap='YlGnBu', vmin=min, vmax=max)
+            pts = ax.scatter(x,y,s=self.point_size, c=vals, cmap='YlGnBu', vmin=min, vmax=max)
         elif proj=='3d':
             ax.set_zlabel('Z Axis')
 
@@ -70,7 +68,7 @@ class Map_Diff:
             ax.set_box_aspect((np.ptp(x), np.ptp(y), np.ptp(z)))
 
             #draw points
-            pts = ax.scatter3D(x,y,z,s=self.point_size, c=pointColors, cmap='YlGnBu', vmin=min, vmax=max)
+            pts = ax.scatter3D(x,y,z,s=self.point_size, c=vals, cmap='YlGnBu', vmin=min, vmax=max)
             ax.zaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f ' + self.unit))
 
         # set units for the x and y axes
@@ -109,9 +107,6 @@ class Map_Diff:
 
         #set color bar with individual ticks and labels
         cbar = plt.colorbar(pts, format=('%.3f ' + self.unit))       
-        pos = [-1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        ticks = [(max*i if i >=0 else -min*i) for i in pos]
-        cbar.set_ticks(ticks)
 
         if show: plt.show()
         if output: fig.savefig(output)
@@ -150,9 +145,6 @@ class Map_Diff:
         
         #set color bar with individual ticks and labels
         cbar = plt.colorbar(pts, ax=ax, orientation='horizontal', format=('%.3f ' + self.unit))       
-        pos = [-1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        ticks = [(max*i if i >=0 else -min*i) for i in pos]
-        cbar.set_ticks(ticks)
 
         if proj=='2d': 
             for a in ax: plt.setp(a.get_xticklabels(), rotation=30, horizontalalignment='right') #rotate x-ticklabels to prevent overlapping

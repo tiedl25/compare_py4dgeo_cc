@@ -77,27 +77,6 @@ class Compare:
         self.slopes = np.empty(self.size, dtype=object)
         self.aspects = np.empty(self.size, dtype=object)
 
-    def sigDiff(self, val1, val2, i=None, r=20):
-        '''
-        Determine if the difference between two values is significant or not.
-
-        Parameters:
-            self (Compare): The object itself.
-            val1 (float): The first value.
-            val2 (float): The second value.
-            i (int): (optional) Sets the index in an array/list.
-            r (int): (optional) Sets the number of decimal places which are included. The default value is 20
-
-        Returns:
-            float: The significant difference.
-        '''
-        if i != None: return 0 if round(val1[i]-val2[i],r) == 0 or None else val1[i]-val2[i]
-        return 0 if round(val1-val2,r) == 0 or None else val1-val2
-
-    def reorder_list(self, li):
-        '''Reorder a list by columns instead of rows.'''
-        return (li[0:,0], li[0:,1], li[0:,2])
-
     def calc_differences(self):
         '''
         Calculate all the differences between related arguments of this class
@@ -108,39 +87,40 @@ class Compare:
         Returns:
             dict: The differences between each related argument of both point clouds
         '''
-        x1,y1,z1 = self.reorder_list(self.cl['pts'])
-        x2,y2,z2 = self.reorder_list(self.re['pts'])
+        x1,y1,z1 = np.transpose(self.cl['pts'])
+        x2,y2,z2 = np.transpose(self.re['pts'])
 
-        nx1,ny1,nz1 = self.reorder_list(self.cl['normals'])
-        nx2,ny2,nz2 = self.reorder_list(self.re['normals'])
+        nx1,ny1,nz1 = np.transpose(self.cl['normals'])
+        nx2,ny2,nz2 = np.transpose(self.re['normals'])
 
         vec_calc = Vec_Calc()
 
-        for i in range(0, self.size):
-            switch={'[False, False]': 0,
-                    '[False, True]': 1,
-                    '[True, False]': 2,
-                    '[True, True]': 3}
+        self.diffs['X'] = abs(x1-x2)
+        self.diffs['Y'] = abs(y1-y2)
+        self.diffs['Z'] = abs(z1-z2)
+        self.diffs['NX'] = abs(nx1-nx2)
+        self.diffs['NY'] = abs(ny1-ny2)
+        self.diffs['NZ'] = abs(nz1-nz2)
+        self.diffs['Distance'] = abs(self.cl['dist']-self.re['dist'])
+        self.diffs['LODetection'] = abs(self.cl['lod']-self.re['lod'])
 
-            s = f"[{np.isnan(self.cl['dist'][i])}, {np.isnan(self.re['dist'][i])}]"
-            self.nan_mode.append(switch.get(s))
+        if self.spread_set == True:
+            self.diffs['Spread1'] = abs(self.cl['spread'][0]-self.re['spread'][0])
+            self.diffs['Spread2'] = abs(self.cl['spread'][1]-self.re['spread'][1])
+        if self.sample_set == True:
+            self.diffs['NumSamples1'] = abs(self.cl['num_samples'][0]-self.re['num_samples'][0])
+            self.diffs['NumSamples2'] = abs(self.cl['num_samples'][1]-self.re['num_samples'][1])
 
-            self.diffs['X'][i] = self.sigDiff(x1, x2, i)
-            self.diffs['Y'][i] = self.sigDiff(y1, y2, i)
-            self.diffs['Z'][i] = self.sigDiff(z1, z2, i)
-            self.diffs['NX'][i] = self.sigDiff(nx1, nx2, i)
-            self.diffs['NY'][i] = self.sigDiff(ny1, ny2, i)
-            self.diffs['NZ'][i] = self.sigDiff(nz1, nz2, i)
-            self.diffs['Distance'][i] = self.sigDiff(self.cl['dist'], self.re['dist'], i)
-            self.diffs['LODetection'][i] = self.sigDiff(self.cl['lod'], self.re['lod'], i)
+        # (cloud is nan, reference is nan)
+        switch={'(False, False)': 0,
+                '(False, True)': 1,
+                '(True, False)': 2,
+                '(True, True)': 3}
 
-            if self.spread_set == True:
-                self.diffs['Spread1'][i] = self.sigDiff(self.cl['spread'][0], self.re['spread'][0], i)
-                self.diffs['Spread2'][i] = self.sigDiff(self.cl['spread'][1], self.re['spread'][1], i)
-            if self.sample_set == True:
-                self.diffs['NumSamples1'][i] = self.sigDiff(self.cl['num_samples'][0], self.re['num_samples'][0], i)
-                self.diffs['NumSamples2'][i] = self.sigDiff(self.cl['num_samples'][1], self.re['num_samples'][1], i)
+        for pair in zip(np.isnan(self.cl['dist']), np.isnan(self.re['dist'])):
+            self.nan_mode.append(switch.get(str(pair)))
 
+        for i in range(0, self.size):      
             normalized_vector = vec_calc.transform((nx2[i], ny2[i], nz2[i]), (nx1[i], ny1[i], nz1[i]))
             self.slopes[i] = vec_calc.getSlope(normalized_vector)
             self.aspects[i] = vec_calc.getAspect(normalized_vector)
@@ -320,7 +300,7 @@ class Compare:
             header.extend(['Aspect', 'Slope', 'Nan-Mode'])
             writer.writerow(header)
 
-            x,y,z = self.reorder_list(self.re['pts'])
+            x,y,z = np.transpose(self.re['pts'])
 
             for i in range(0, self.size):
                 row = [x[i], y[i], z[i],
