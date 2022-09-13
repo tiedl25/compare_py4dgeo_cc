@@ -66,8 +66,6 @@
 <span class="kn">import</span> <span class="nn">file_handle</span> <span class="k">as</span> <span class="nn">fhandle</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">map_diff</span> <span class="kn">import</span> <span class="n">Map_Diff</span>
-
 <div class="viewcode-block" id="Py4d_M3C2"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2">[docs]</a><span class="k">class</span> <span class="nc">Py4d_M3C2</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A class for calculating distances between point clouds by implementing the m3c2-algorithm from the py4dgeo library. </span>
@@ -109,22 +107,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cyl_radii&quot;</span><span class="p">:(</span><span class="mf">0.5</span><span class="p">,),</span> <span class="s2">&quot;normal_radii&quot;</span><span class="p">:(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">),</span><span class="s2">&quot;max_distance&quot;</span><span class="p">:(</span><span class="mi">15</span><span class="p">),</span><span class="s2">&quot;registration_error&quot;</span><span class="p">:(</span><span class="mf">0.0024</span><span class="p">)}</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">read_cc_params</span><span class="p">()</span>
-
-<div class="viewcode-block" id="Py4d_M3C2.mapDiff"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.mapDiff">[docs]</a>    <span class="k">def</span> <span class="nf">mapDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">proj</span><span class="o">=</span><span class="s1">&#39;2d&#39;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Handle the plots of distance and lodetection. define if the plot should be in 3d or 2d.</span>
-
-<span class="sd">        Parameters:</span>
-<span class="sd">            self (Compare): The object itself.</span>
-<span class="sd">            path1 (str): The output path for the distance plot.</span>
-<span class="sd">            path2 (str): The output path for the lodetection plot.</span>
-<span class="sd">            proj (bool): Specifies whether the plot is plotted in 2d(True) or 3d(False).</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">map1</span> <span class="o">=</span> <span class="n">Map_Diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corepoints</span><span class="p">,</span> <span class="s2">&quot;M3C2 distances&quot;</span><span class="p">)</span>
-        <span class="n">map2</span> <span class="o">=</span> <span class="n">Map_Diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uncertainties</span><span class="p">[</span><span class="s1">&#39;lodetection&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">corepoints</span><span class="p">,</span> <span class="s2">&quot;M3C2 lodetection&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Plot differences on a </span><span class="si">{}</span><span class="s1"> map&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proj</span><span class="p">))</span>
-        <span class="n">map1</span><span class="o">.</span><span class="n">mapDiff</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span>    
-        <span class="n">map2</span><span class="o">.</span><span class="n">mapDiff</span><span class="p">(</span><span class="n">path2</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">proj</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Py4d_M3C2.write"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -219,25 +201,6 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File extension has to be las, laz, xyz or txt&quot;</span><span class="p">)</span>
             <span class="n">quit</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Py4d_M3C2.read_with_magic"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.read_with_magic">[docs]</a>    <span class="k">def</span> <span class="nf">read_with_magic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">other_epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">parse_opts</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">            self (Py4d_M3C2): The object itself.</span>
-<span class="sd">            *path (str): The path to a point cloud file. Can also handle multiple files.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="kn">import</span> <span class="nn">magic</span> <span class="c1">#pip install python-magic-bin</span>
-
-        <span class="n">filetype</span> <span class="o">=</span> <span class="n">magic</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">py4dgeo</span><span class="o">.</span><span class="n">read_from_las</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">other_epoch</span><span class="o">=</span><span class="n">other_epoch</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">py4dgeo</span><span class="o">.</span><span class="n">read_from_xyz</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">other_epoch</span><span class="o">=</span><span class="n">other_epoch</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">parse_opts</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File type has to be ascii or las&quot;</span><span class="p">)</span>
-            <span class="n">quit</span><span class="p">()</span></div>
-
 <div class="viewcode-block" id="Py4d_M3C2.run"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Main function for calculating the distances. Implements the m3c2-algorithm from the py4dgeo library.</span>
@@ -257,23 +220,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">m3c2</span><span class="o">.</span><span class="n">corepoint_normals</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span></div></div>
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Main part for instatianting a Py4d_M3C2 object. Will only be executed when the file is executed directly from the command line, not by implementing it in another package.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># specify the parameters in a dictionary</span>
-    <span class="c1">#params = {&quot;cyl_radii&quot;:(0.025,), &quot;normal_radii&quot;:(0.025,),&quot;max_distance&quot;:(0.5),&quot;registration_error&quot;:(0.0)}</span>
-
-    <span class="n">py4d</span> <span class="o">=</span> <span class="n">Py4d_M3C2</span><span class="p">(</span><span class="n">path1</span><span class="o">=</span><span class="s1">&#39;data/test1.xyz&#39;</span><span class="p">,</span> 
-                    <span class="n">path2</span><span class="o">=</span><span class="s1">&#39;data/test2.xyz&#39;</span><span class="p">,</span> 
-                    <span class="n">params</span><span class="o">=</span><span class="s1">&#39;m3c2_params.txt&#39;</span><span class="p">,</span> 
-                    <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;tmp/run.xyz&#39;</span><span class="p">)</span>
-    <span class="n">py4d</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
-    <span class="c1">#py4d.mapDiff(&#39;output/py4d_distance&#39;, &#39;output/py4d_lodetection&#39;, &#39;2d&#39;)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
            </div>

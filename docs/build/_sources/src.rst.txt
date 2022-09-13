@@ -4,10 +4,10 @@ src package
 Submodules
 ----------
 
-src.compareCC\_Py4d module
---------------------------
+src.compare module
+------------------
 
-.. automodule:: src.compareCC_Py4d
+.. automodule:: src.compare
    :members:
    :undoc-members:
    :show-inheritance:
@@ -32,6 +32,14 @@ src.py4d\_m3c2 module
 ---------------------
 
 .. automodule:: src.py4d_m3c2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.setup module
+----------------
+
+.. automodule:: src.setup
    :members:
    :undoc-members:
    :show-inheritance:

@@ -2,8 +2,6 @@ import py4dgeo
 import file_handle as fhandle
 import numpy as np
 
-from map_diff import Map_Diff
-
 class Py4d_M3C2:
     '''
     A class for calculating distances between point clouds by implementing the m3c2-algorithm from the py4dgeo library. 
@@ -45,22 +43,6 @@ class Py4d_M3C2:
             self.params = {"cyl_radii":(0.5,), "normal_radii":(4.0, 0.5, 7.5),"max_distance":(15),"registration_error":(0.0024)}
         elif type(self.params) == str:
             self.read_cc_params()
-
-    def mapDiff(self, path1, path2, proj='2d'):
-        '''
-        Handle the plots of distance and lodetection. define if the plot should be in 3d or 2d.
-
-        Parameters:
-            self (Compare): The object itself.
-            path1 (str): The output path for the distance plot.
-            path2 (str): The output path for the lodetection plot.
-            proj (bool): Specifies whether the plot is plotted in 2d(True) or 3d(False).
-        '''
-        map1 = Map_Diff(self.distances, self.corepoints, "M3C2 distances")
-        map2 = Map_Diff(self.uncertainties['lodetection'], self.corepoints, "M3C2 lodetection")
-        print('Plot differences on a {} map'.format(proj))
-        map1.mapDiff(path1, True, proj)    
-        map2.mapDiff(path2, True, proj)
 
     def write(self, cc_mode=True):
         '''
@@ -155,25 +137,6 @@ class Py4d_M3C2:
             print("File extension has to be las, laz, xyz or txt")
             quit()
 
-    def read_with_magic(self, *path, other_epoch=None, **parse_opts):
-        '''
-        Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.
-        
-        Parameters:
-            self (Py4d_M3C2): The object itself.
-            *path (str): The path to a point cloud file. Can also handle multiple files.
-        '''
-        import magic #pip install python-magic-bin
-
-        filetype = magic.from_file(path[0], mime=True)
-        if filetype == 'application/octet-stream':
-            return py4dgeo.read_from_las(*path, other_epoch=other_epoch)
-        elif filetype == 'text/plain':
-            return py4dgeo.read_from_xyz(*path, other_epoch=other_epoch, comments="//", **parse_opts)
-        else:
-            print("File type has to be ascii or las")
-            quit()
-
     def run(self):
         '''
         Main function for calculating the distances. Implements the m3c2-algorithm from the py4dgeo library.
@@ -193,20 +156,3 @@ class Py4d_M3C2:
         self.normals = m3c2.corepoint_normals
         if self.output_path: self.write()
         return self.distances
-
-def main():
-    '''
-    Main part for instatianting a Py4d_M3C2 object. Will only be executed when the file is executed directly from the command line, not by implementing it in another package.
-    '''
-    # specify the parameters in a dictionary
-    #params = {"cyl_radii":(0.025,), "normal_radii":(0.025,),"max_distance":(0.5),"registration_error":(0.0)}
-
-    py4d = Py4d_M3C2(path1='data/test1.xyz', 
-                    path2='data/test2.xyz', 
-                    params='m3c2_params.txt', 
-                    output_path='tmp/run.xyz')
-    py4d.run()
-    #py4d.mapDiff('output/py4d_distance', 'output/py4d_lodetection', '2d')
-
-if __name__ == "__main__":
-    main()

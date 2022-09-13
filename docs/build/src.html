@@ -40,10 +40,11 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">src package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-src.compareCC_Py4d">src.compareCC_Py4d module</a></li>
+<li><a class="reference internal" href="#module-src.compare">src.compare module</a></li>
 <li><a class="reference internal" href="#module-src.file_handle">src.file_handle module</a></li>
 <li><a class="reference internal" href="#module-src.map_diff">src.map_diff module</a></li>
 <li><a class="reference internal" href="#module-src.py4d_m3c2">src.py4d_m3c2 module</a></li>
+<li><a class="reference internal" href="#module-src.setup">src.setup module</a></li>
 <li><a class="reference internal" href="#module-src.vec_calc">src.vec_calc module</a></li>
 <li><a class="reference internal" href="#module-src">Module contents</a></li>
 </ul>
@@ -79,16 +80,16 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-src.compareCC_Py4d">
-<span id="src-comparecc-py4d-module"></span><h2>src.compareCC_Py4d module<a class="headerlink" href="#module-src.compareCC_Py4d" title="Permalink to this heading"></a></h2>
+<section id="module-src.compare">
+<span id="src-compare-module"></span><h2>src.compare module<a class="headerlink" href="#module-src.compare" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">re_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.compare.</span></span><span class="sig-name descname"><span class="pre">Compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">re_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_dist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_lod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">re_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class for comparing the outputs of the m3c2-algorithm between CloudCompare and Py4dGeo</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.re">
-<span class="sig-name descname"><span class="pre">re</span></span><a class="headerlink" href="#src.compareCC_Py4d.Compare.re" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.re">
+<span class="sig-name descname"><span class="pre">re</span></span><a class="headerlink" href="#src.compare.Compare.re" title="Permalink to this definition"></a></dt>
 <dd><p>Stores all the information of the reference point cloud (Cloud compare) -&gt; coordinates, distances, lodetection, spread1, spread2 and normal coordinates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -98,8 +99,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.cl">
-<span class="sig-name descname"><span class="pre">cl</span></span><a class="headerlink" href="#src.compareCC_Py4d.Compare.cl" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.cl">
+<span class="sig-name descname"><span class="pre">cl</span></span><a class="headerlink" href="#src.compare.Compare.cl" title="Permalink to this definition"></a></dt>
 <dd><p>Stores all the information of the point cloud (Py4dGeo) -&gt; coordinates, distances, lodetection, spread1, spread2 and normal coordinates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -109,8 +110,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.size">
-<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#src.compareCC_Py4d.Compare.size" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.size">
+<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#src.compare.Compare.size" title="Permalink to this definition"></a></dt>
 <dd><p>The number of points in each cloud</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -120,8 +121,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.diffs">
-<span class="sig-name descname"><span class="pre">diffs</span></span><a class="headerlink" href="#src.compareCC_Py4d.Compare.diffs" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.diffs">
+<span class="sig-name descname"><span class="pre">diffs</span></span><a class="headerlink" href="#src.compare.Compare.diffs" title="Permalink to this definition"></a></dt>
 <dd><p>The differences between between each related argument of both clouds -&gt; gets calculated in calc_differences()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -131,8 +132,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.aspects">
-<span class="sig-name descname"><span class="pre">aspects</span></span><a class="headerlink" href="#src.compareCC_Py4d.Compare.aspects" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.aspects">
+<span class="sig-name descname"><span class="pre">aspects</span></span><a class="headerlink" href="#src.compare.Compare.aspects" title="Permalink to this definition"></a></dt>
 <dd><p>The aspects between related normal vectors in both clouds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -142,8 +143,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.slopes">
-<span class="sig-name descname"><span class="pre">slopes</span></span><a class="headerlink" href="#src.compareCC_Py4d.Compare.slopes" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.slopes">
+<span class="sig-name descname"><span class="pre">slopes</span></span><a class="headerlink" href="#src.compare.Compare.slopes" title="Permalink to this definition"></a></dt>
 <dd><p>The slopes between related normal vectors in both clouds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -153,12 +154,12 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.calc_differences">
-<span class="sig-name descname"><span class="pre">calc_differences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.calc_differences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.calc_differences" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.calc_differences">
+<span class="sig-name descname"><span class="pre">calc_differences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.calc_differences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.calc_differences" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate all the differences between related arguments of this class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – the object itself</p>
+<dd class="field-odd"><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – the object itself</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The differences between each related argument of both point clouds</p>
@@ -170,13 +171,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.mapDiff">
-<span class="sig-name descname"><span class="pre">mapDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advanced</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.mapDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.mapDiff" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.mapDiff">
+<span class="sig-name descname"><span class="pre">mapDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advanced</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.mapDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.mapDiff" title="Permalink to this definition"></a></dt>
 <dd><p>Handle the plots of distance and lodetection. Decide if the plots are single-plotted or the distance/lodetection plots from CC and Py4dGeo are also shown.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path1</strong> (<em>str</em>) – The output path for the distance plot.</p></li>
 <li><p><strong>path2</strong> (<em>str</em>) – The output path for the lodetection plot.</p></li>
 <li><p><strong>proj</strong> (<em>str</em>) – Specifies whether the plot is plotted in 2d or 3d.</p></li>
@@ -187,13 +188,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotNormDiff">
-<span class="sig-name descname"><span class="pre">plotNormDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotNormDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotNormDiff" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.plotNormDiff">
+<span class="sig-name descname"><span class="pre">plotNormDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.plotNormDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.plotNormDiff" title="Permalink to this definition"></a></dt>
 <dd><p>Draw the normal differences between both point clouds on a polar plot by using matplotlib.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The output path for the normal plot.</p></li>
 </ul>
 </dd>
@@ -201,13 +202,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotSampleDiff">
-<span class="sig-name descname"><span class="pre">plotSampleDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotSampleDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotSampleDiff" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.plotSampleDiff">
+<span class="sig-name descname"><span class="pre">plotSampleDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.plotSampleDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.plotSampleDiff" title="Permalink to this definition"></a></dt>
 <dd><p>Plot point density differences between both point clouds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The output path for the spread plot.</p></li>
 </ul>
 </dd>
@@ -215,13 +216,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.plotSpreadDiff">
-<span class="sig-name descname"><span class="pre">plotSpreadDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.plotSpreadDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.plotSpreadDiff" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.plotSpreadDiff">
+<span class="sig-name descname"><span class="pre">plotSpreadDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.plotSpreadDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.plotSpreadDiff" title="Permalink to this definition"></a></dt>
 <dd><p>Plot standard deviation differences between both point clouds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The output path for the spread plot.</p></li>
 </ul>
 </dd>
@@ -229,13 +230,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.writeDiff">
-<span class="sig-name descname"><span class="pre">writeDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.writeDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.writeDiff" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.writeDiff">
+<span class="sig-name descname"><span class="pre">writeDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.writeDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.writeDiff" title="Permalink to this definition"></a></dt>
 <dd><p>Write all the differences between both point clouds to a csv file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The output path for the csv file.</p></li>
 </ul>
 </dd>
@@ -243,73 +244,19 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.Compare.writeStatistics">
-<span class="sig-name descname"><span class="pre">writeStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#Compare.writeStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.Compare.writeStatistics" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.compare.Compare.writeStatistics">
+<span class="sig-name descname"><span class="pre">writeStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compare.html#Compare.writeStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compare.Compare.writeStatistics" title="Permalink to this definition"></a></dt>
 <dd><p>Write statistics (mean, median, standard-deviation) of the differences between both point clouds to a csv file:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>path</strong> (<em>str</em>) – The output path for the csv file.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.checkParams">
-<span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">checkParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#checkParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.checkParams" title="Permalink to this definition"></a></dt>
-<dd><p>Check if console arguments are provided. The arguments are handled by the ArgumentParser class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>skip</strong> (<em>bool</em>) – Instead of using the console arguments, default parameters are set, for development purposes</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>str – Path to the first point cloud</p></li>
-<li><p>str – Path to the second point cloud</p></li>
-<li><p>str – Path to the corepoint file</p></li>
-<li><p>str – Path to the output directory</p></li>
-<li><p>str – Path to the CC parameter file</p></li>
-<li><p>str – Defines if the lodetection/distances plot gets mapped in 3d or 2d</p></li>
-<li><p>bool – Defines if the lodetection/distances plot gets mapped in advanced mode or not</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.main">
-<span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.main" title="Permalink to this definition"></a></dt>
-<dd><p>Main part of the programm. Will only be executed when the file is executed directly from the command line, not by implementing it in another package.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src.compareCC_Py4d.reorder">
-<span class="sig-prename descclassname"><span class="pre">src.compareCC_Py4d.</span></span><span class="sig-name descname"><span class="pre">reorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cloud</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/compareCC_Py4d.html#reorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.compareCC_Py4d.reorder" title="Permalink to this definition"></a></dt>
-<dd><p>Rearrange certain parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cloud</strong> (<em>numpy.ndarray</em>) – All the parameters of a the point cloud.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>numpy.ndarray – The normals of the cloud.</p></li>
-<li><p>numpy.ndarray – The spread information.</p></li>
-<li><p>numpy.ndarray – The num_sample information.</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -398,7 +345,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>vals</strong> (<em>list</em>) – A list of arrays, whereby each array contains one set of values that gets plotted as colors. More than one set of values is possibly, but then also more coords must be provided.</p></li>
 <li><p><strong>crds</strong> (<em>list</em>) – A list of coordinate arrays. Each coordinate array will be plotted in a different subplot.</p></li>
 <li><p><strong>ttls</strong> (<em>list</em>) – A list of titles for each subplot.</p></li>
@@ -417,7 +364,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>output</strong> (<em>str</em>) – The path for the output file. If not set the plot wont be saved.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – Specifies if the plot is shown or not.</p></li>
 <li><p><strong>proj</strong> (<em>str</em>) – Specifies if the plot is 2d or 3d.</p></li>
@@ -433,7 +380,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
+<li><p><strong>self</strong> (<a class="reference internal" href="#src.compare.Compare" title="src.compare.Compare"><em>Compare</em></a>) – The object itself.</p></li>
 <li><p><strong>vals</strong> (<em>numpy.ndarray</em>) – The values to be plotted as colors</p></li>
 <li><p><strong>crds</strong> (<em>numpy.ndarray</em>) – The points to be plotted.</p></li>
 <li><p><strong>ttl</strong> (<em>str</em>) – The title of the subplot.</p></li>
@@ -508,22 +455,6 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.mapDiff">
-<span class="sig-name descname"><span class="pre">mapDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.mapDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.mapDiff" title="Permalink to this definition"></a></dt>
-<dd><p>Handle the plots of distance and lodetection. define if the plot should be in 3d or 2d.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.compareCC_Py4d.Compare" title="src.compareCC_Py4d.Compare"><em>Compare</em></a>) – The object itself.</p></li>
-<li><p><strong>path1</strong> (<em>str</em>) – The output path for the distance plot.</p></li>
-<li><p><strong>path2</strong> (<em>str</em>) – The output path for the lodetection plot.</p></li>
-<li><p><strong>proj</strong> (<em>bool</em>) – Specifies whether the plot is plotted in 2d(True) or 3d(False).</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.read">
 <span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parse_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read" title="Permalink to this definition"></a></dt>
 <dd><p>Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.</p>
@@ -550,20 +481,6 @@
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.py4d_m3c2.Py4d_M3C2.read_with_magic">
-<span class="sig-name descname"><span class="pre">read_with_magic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parse_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#Py4d_M3C2.read_with_magic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.Py4d_M3C2.read_with_magic" title="Permalink to this definition"></a></dt>
-<dd><p>Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.py4d_m3c2.Py4d_M3C2" title="src.py4d_m3c2.Py4d_M3C2"><em>Py4d_M3C2</em></a>) – The object itself.</p></li>
-<li><p><strong>*path</strong> (<em>str</em>) – The path to a point cloud file. Can also handle multiple files.</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -601,28 +518,67 @@
 
 </dd></dl>
 
+</section>
+<section id="module-src.setup">
+<span id="src-setup-module"></span><h2>src.setup module<a class="headerlink" href="#module-src.setup" title="Permalink to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="src.py4d_m3c2.main">
-<span class="sig-prename descclassname"><span class="pre">src.py4d_m3c2.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/py4d_m3c2.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.py4d_m3c2.main" title="Permalink to this definition"></a></dt>
-<dd><p>Main part for instatianting a Py4d_M3C2 object. Will only be executed when the file is executed directly from the command line, not by implementing it in another package.</p>
+<dt class="sig sig-object py" id="src.setup.checkParams">
+<span class="sig-prename descclassname"><span class="pre">src.setup.</span></span><span class="sig-name descname"><span class="pre">checkParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/setup.html#checkParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.setup.checkParams" title="Permalink to this definition"></a></dt>
+<dd><p>Check if console arguments are provided. The arguments are handled by the ArgumentParser class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skip</strong> (<em>bool</em>) – Instead of using the console arguments, default parameters are set, for development purposes</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>str – Path to the first point cloud</p></li>
+<li><p>str – Path to the second point cloud</p></li>
+<li><p>str – Path to the corepoint file</p></li>
+<li><p>str – Path to the output directory</p></li>
+<li><p>str – Path to the CC parameter file</p></li>
+<li><p>str – Defines if the lodetection/distances plot gets mapped in 3d or 2d</p></li>
+<li><p>bool – Defines if the lodetection/distances plot gets mapped in advanced mode or not</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.setup.reorder">
+<span class="sig-prename descclassname"><span class="pre">src.setup.</span></span><span class="sig-name descname"><span class="pre">reorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cloud</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/setup.html#reorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.setup.reorder" title="Permalink to this definition"></a></dt>
+<dd><p>Rearrange certain parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cloud</strong> (<em>numpy.ndarray</em>) – All the parameters of a the point cloud.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>numpy.ndarray – The normals of the cloud.</p></li>
+<li><p>numpy.ndarray – The spread information.</p></li>
+<li><p>numpy.ndarray – The num_sample information.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="module-src.vec_calc">
 <span id="src-vec-calc-module"></span><h2>src.vec_calc module<a class="headerlink" href="#module-src.vec_calc" title="Permalink to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="src.vec_calc.Vec_Calc">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.vec_calc.</span></span><span class="sig-name descname"><span class="pre">Vec_Calc</span></span><a class="reference internal" href="_modules/src/vec_calc.html#Vec_Calc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.Vec_Calc" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class for performing different calculations on Vectors.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="src.vec_calc.Vec_Calc.getAngle">
-<span class="sig-name descname"><span class="pre">getAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#Vec_Calc.getAngle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.Vec_Calc.getAngle" title="Permalink to this definition"></a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.vec_calc.getAngle">
+<span class="sig-prename descclassname"><span class="pre">src.vec_calc.</span></span><span class="sig-name descname"><span class="pre">getAngle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#getAngle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.getAngle" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the angle between two vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.vec_calc.Vec_Calc" title="src.vec_calc.Vec_Calc"><em>Vec_Calc</em></a>) – The object itself.</p></li>
 <li><p><strong>v1</strong> (<em>numpy.array</em>) – The first vector.</p></li>
 <li><p><strong>v2</strong> (<em>numpy.array</em>) – The second vector.</p></li>
 </ul>
@@ -636,16 +592,13 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="src.vec_calc.Vec_Calc.getAspect">
-<span class="sig-name descname"><span class="pre">getAspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#Vec_Calc.getAspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.Vec_Calc.getAspect" title="Permalink to this definition"></a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.vec_calc.getAspect">
+<span class="sig-prename descclassname"><span class="pre">src.vec_calc.</span></span><span class="sig-name descname"><span class="pre">getAspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#getAspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.getAspect" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the aspect of a given vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.vec_calc.Vec_Calc" title="src.vec_calc.Vec_Calc"><em>Vec_Calc</em></a>) – The object itself.</p></li>
-<li><p><strong>normal</strong> – The vector whose aspect should be returned.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>normal</strong> – The vector whose aspect should be returned.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The calculated aspect.</p>
@@ -656,16 +609,13 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="src.vec_calc.Vec_Calc.getSlope">
-<span class="sig-name descname"><span class="pre">getSlope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#Vec_Calc.getSlope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.Vec_Calc.getSlope" title="Permalink to this definition"></a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.vec_calc.getSlope">
+<span class="sig-prename descclassname"><span class="pre">src.vec_calc.</span></span><span class="sig-name descname"><span class="pre">getSlope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#getSlope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.getSlope" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the slope of a given vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.vec_calc.Vec_Calc" title="src.vec_calc.Vec_Calc"><em>Vec_Calc</em></a>) – The object itself.</p></li>
-<li><p><strong>normal</strong> – The vector whose slope should be returned.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>normal</strong> – The vector whose slope should be returned.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The calculated slope.</p>
@@ -676,14 +626,13 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="src.vec_calc.Vec_Calc.rotate">
-<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#Vec_Calc.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.Vec_Calc.rotate" title="Permalink to this definition"></a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.vec_calc.rotate">
+<span class="sig-prename descclassname"><span class="pre">src.vec_calc.</span></span><span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.rotate" title="Permalink to this definition"></a></dt>
 <dd><p>Take two vectors and rotate the first one around a given line, the second one gets rotated in the same manner, so that both vectors keep their angle to each other.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.vec_calc.Vec_Calc" title="src.vec_calc.Vec_Calc"><em>Vec_Calc</em></a>) – The object itself.</p></li>
 <li><p><strong>v1</strong> (<em>numpy.array</em>) – The first vector.</p></li>
 <li><p><strong>v2</strong> (<em>numpy.array</em>) – The second vector.</p></li>
 <li><p><strong>norm</strong> (<em>numpy.array</em>) – A vector that represents the direction of a line. vec1/vec2 will be rotated around this line.</p></li>
@@ -703,14 +652,13 @@
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="src.vec_calc.Vec_Calc.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#Vec_Calc.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.Vec_Calc.transform" title="Permalink to this definition"></a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.vec_calc.transform">
+<span class="sig-prename descclassname"><span class="pre">src.vec_calc.</span></span><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/vec_calc.html#transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.vec_calc.transform" title="Permalink to this definition"></a></dt>
 <dd><p>Take two vectors as input and rotate the second vector, so that it has the same angle to the z-unitvector as the first vector to the second one.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#src.vec_calc.Vec_Calc" title="src.vec_calc.Vec_Calc"><em>Vec_Calc</em></a>) – The object itself.</p></li>
 <li><p><strong>v1</strong> (<em>numpy.array</em>) – The first vector.</p></li>
 <li><p><strong>v2</strong> (<em>numpy.array</em>) – The second vector.</p></li>
 </ul>
@@ -722,8 +670,6 @@
 <dd class="field-odd"><p>numpy.array</p>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
