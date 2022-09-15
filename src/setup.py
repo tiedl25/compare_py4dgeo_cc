@@ -8,7 +8,7 @@ import file_handle as fhandle
 from py4d_m3c2 import Py4d_M3C2
 from compare import Compare
 
-def checkParams(skip):
+def checkParams(test):
     '''
     Check if console arguments are provided. The arguments are handled by the ArgumentParser class.
 
@@ -25,22 +25,25 @@ def checkParams(skip):
             - str -- Defines if the lodetection/distances plot gets mapped in 3d or 2d
             - bool -- Defines if the lodetection/distances plot gets mapped in advanced mode or not
     '''
-    if not skip:
+    if not test:
         parser = argparse.ArgumentParser()
-        parser.add_argument(dest='cloud1', type=argparse.FileType('r'), help='Path to the first pointcloud')
-        parser.add_argument(dest='cloud2', type=argparse.FileType('r'), help='Path to the second pointcloud')
-        parser.add_argument(dest='param_file', type=argparse.FileType('r'), help='path to the CC parameter file')
-        parser.add_argument('-o', '--output_dir', dest='output_dir', type=str, help='path to the output directory', nargs=1)
-        parser.add_argument('-c', '--corepoints', dest='corepoints', type=argparse.FileType('r'), help='path to the corepoints file', nargs=1)
+        parser.add_argument(dest='cloud1', type=argparse.FileType('r'), help='Path to the first pointcloud or path to the calculated cc pointcloud if skip argument is set')
+        parser.add_argument(dest='cloud2', type=argparse.FileType('r'), help='Path to the second pointcloud or path to the calculated py4dgeo pointcloud if skip argument is set')
+        parser.add_argument(dest='param_file', type=argparse.FileType('r'), help='Path to the CC parameter file')
+        parser.add_argument('-o', '--output_dir', dest='output_dir', type=str, help='Path to the output directory', nargs=1)
+        parser.add_argument('-c', '--corepoints', dest='corepoints', type=argparse.FileType('r'), help='Path to the corepoints file', nargs=1)
         parser.add_argument('-2', '--plot_2d', dest='plot_2d', action='store_true', help='Plot differences in lodetection/distances in 2d instead of 3d')
         parser.add_argument('-a', '--advanced_dist_plot', dest='advanced_dist_plot', action='store_true', help='Plot differences in lodetection/distances in advanced mode for better comparability')
-        
+        parser.add_argument('-s', '--skip', dest='skip', action='store_true', help='Skip the calculations in Py4dGeo and CloudCompare if the data already exists')
+        parser.add_argument('-r', '--repeat', dest='repeat', action='store_true', help='Repeat the comparing and plotting if the data already exists')
+
         args = parser.parse_args()
+
         crpts = args.corepoints[0].name if args.corepoints else False
         out_dir = args.output_dir[0] if args.output_dir else 'output' # default output directory if not specified
-        return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot
+        return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot, args.skip, args.repeat
 
-    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False
+    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False, False, True
 
 def reorder(cloud):
     '''
@@ -74,15 +77,14 @@ def reorder(cloud):
 if __name__ == '__main__':
     test = True # for debugging and developing use default parameters
     if len(sys.argv) > 1: test = False
-    skip = True # for skipping the calculations in py4dgeo and cloudcompare, e.g. if calculated clouds already exist
 
-    PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED = checkParams(test)  
+    PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED, skip, repeat= checkParams(test)  
     if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare' #default installation directory
     elif platform.system() == 'Linux': CC_BIN = os.popen('which cloudcompare').read()
 
     if CC_BIN == '': 
         print('CloudCompare Binary not found')
-        quit()
+        os._exit(0)
 
     OUTPUT = {'cc' : '/CC_Output.laz', 
             'py4d' : '/Py4dGeo_Output.laz', 
@@ -96,14 +98,17 @@ if __name__ == '__main__':
 
     for out in OUTPUT.items(): OUTPUT[out[0]] = OUTPUT_DIR + out[1] # add output directory to string
 
+    if skip:
+        OUTPUT['cc'] = PATH_CLOUD1
+        OUTPUT['py4d'] = PATH_CLOUD2
+
     if not os.path.exists(OUTPUT_DIR): os.mkdir(OUTPUT_DIR)
 
-    if not skip: 
+    if not repeat and not skip: 
         print('Calculate Py4dGeo output')
         py4d = Py4d_M3C2(path1=PATH_CLOUD1, path2=PATH_CLOUD2, corepoint_path=PATH_COREPTS, output_path=OUTPUT['py4d'], params=PARAMS)
         py4d.run()
 
-    if not skip: 
         print('Calculate CloudCompare output')
         if PATH_COREPTS: 
             spaces = '   ' # 2 resp. 3 spaces before filename are needed to save only the calculated cloud and not the input clouds in CloudCompare
@@ -130,7 +135,7 @@ if __name__ == '__main__':
     comp.calc_differences()
     comp.plotNormDiff(OUTPUT['normal_diff'])
     comp.mapDiff(OUTPUT['distance_diff'], OUTPUT['lod_diff'], PROJECTION, ADVANCED)
-    #comp.spreadDiff(re_spread, cl_spread, OUTPUT['spread_diff'], plot=True)
+    comp.spreadDiff(re_spread, cl_spread, OUTPUT['spread_diff'], plot=True)
     comp.sampleDiff(re_num_samples, cl_num_samples, OUTPUT['sample_diff'], plot=True)
     comp.writeStatistics(OUTPUT['stats'])
     comp.writeDiff(OUTPUT['diffs'])

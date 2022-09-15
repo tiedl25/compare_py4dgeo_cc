@@ -262,12 +262,21 @@ class Compare:
                 median[i] = None
                 std_dev[i] = None
 
+        bo_nan = len([i for i in self.nan_mode if i==3])
+        cl_nan = len([i for i in self.nan_mode if i==2])
+        re_nan = len([i for i in self.nan_mode if i==1])
+
         with open(path, mode='w') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
+            
             writer.writerow(keys)
             writer.writerow(mean)
             writer.writerow(median)
             writer.writerow(std_dev)
+
+            writer.writerow(['Nan-Values in CloudCompare', f'{(bo_nan + re_nan)/self.size*100:.2f} %'])
+            writer.writerow(['Nan-Values in Py4dGeo', f'{(bo_nan + cl_nan)/self.size*100:.2f} %'])
+            writer.writerow(['Nan-Values in Both', f'{bo_nan/self.size*100:.2f} %'])
 
     def writeDiff(self, path):
         '''

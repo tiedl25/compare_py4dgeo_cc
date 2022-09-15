@@ -13,7 +13,7 @@ class Map_Diff:
         size (int): The number of coordinates.
         unit (str): The unit used for the axes.
     '''
-    def __init__(self, mapped_vals, coords, title='', unit='m'):
+    def __init__(self, mapped_vals, coords, title='', unit='m', point_size=1):
         '''
         The constructor of the Map_Diff class.
 
@@ -29,7 +29,7 @@ class Map_Diff:
         self.coords = coords
         self.size = int(np.size(coords/3))
         self.unit = unit
-        self.point_size = 1
+        self.point_size = point_size
 
     def plot(self, crds, vals, ttl, ax, min, max, proj='2d'):
         '''
