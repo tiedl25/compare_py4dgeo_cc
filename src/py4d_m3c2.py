@@ -121,7 +121,7 @@ class Py4d_M3C2:
         if dc['ExportStdDevInfo'] == 'true': self.exp_spread = True
 
         # Multi-Scale Mode
-        if dc['NormalMode'] == '2': self.params['normal_radii'] = (float(dc['NormalMinScale']), float(dc['NormalStep']), float(dc['NormalMaxScale']))
+        if dc['NormalMode'] == '2': self.params['normal_radii'] = (float(dc['NormalMinScale'])/2, float(dc['NormalStep'])/2, float(dc['NormalMaxScale'])/2)
 
     def read(self, *path, other_epoch=None, **parse_opts):
         '''

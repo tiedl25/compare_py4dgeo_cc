@@ -144,12 +144,11 @@ class Compare:
         plt.title('Polar plot of normal differences')
         plt.xlabel('Aspect')
         plt.ylabel('Slope', rotation=0)
+        
         ax.yaxis.set_label_coords(1, 0.75)
         ax.yaxis.set_offset_position('right')
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
-        # set units for the x and y axes
-        #plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
-        #plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
+
         plt.scatter(self.aspects, self.slopes, s=2, c='b')
         plt.savefig(path)
         plt.close()
@@ -240,13 +239,10 @@ class Compare:
             print('There is nothing to write. You have to call calc_differences first.')
             return
 
-        s = len(self.diffs)+3
-        mean = np.empty(s, dtype=object)
-        median = np.empty(s, dtype=object)
-        std_dev = np.empty(s, dtype=object)
-        mean[0] = 'Mean'
-        median[0] = 'Median'
-        std_dev[0] = 'Standard Deviation'
+        s = len(self.diffs)+2
+        mean = np.empty(s, dtype=np.float64)
+        median = np.empty(s, dtype=np.float64)
+        std_dev = np.empty(s, dtype=np.float64)
 
         keys = ['Statistics']
         keys.extend(list(self.diffs.keys()))
@@ -274,6 +270,11 @@ class Compare:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
             
             writer.writerow(keys)
+
+            mean = np.append(['Mean'], mean)
+            median = np.append(['Median'], median)
+            std_dev = np.append(['Standard Deviation'], std_dev)
+
             writer.writerow(mean)
             writer.writerow(median)
             writer.writerow(std_dev)

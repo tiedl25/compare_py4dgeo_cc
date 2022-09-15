@@ -43,7 +43,7 @@ def checkParams(test):
         out_dir = args.output_dir[0] if args.output_dir else 'output' # default output directory if not specified
         return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot, args.skip, args.repeat
 
-    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False, False, True
+    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False, False, False
 
 def reorder(cloud):
     '''
@@ -126,12 +126,21 @@ if __name__ == '__main__':
     re_normals, re_spread, re_num_samples = reorder(reference)
     cl_normals, cl_spread, cl_num_samples = reorder(cloud)
 
-    comp = Compare(reference[0], re_normals,
-                    reference[1]['M3C2__distance'], 
-                    reference[1]['distance__uncertainty'], 
-                    cloud[0], cl_normals, 
-                    cloud[1]['M3C2__distance'], 
-                    cloud[1]['distance__uncertainty'])
+    #CC changed exported parameter names
+    if 'M3C2__distance' in reference[1]:
+        comp = Compare(reference[0], re_normals,
+                        reference[1]['M3C2__distance'], 
+                        reference[1]['distance__uncertainty'], 
+                        cloud[0], cl_normals, 
+                        cloud[1]['M3C2__distance'], 
+                        cloud[1]['distance__uncertainty'])
+    else:
+        comp = Compare(reference[0], re_normals,
+                        reference[1]['M3C2 distance'], 
+                        reference[1]['distance uncertainty'], 
+                        cloud[0], cl_normals, 
+                        cloud[1]['M3C2__distance'], 
+                        cloud[1]['distance__uncertainty'])
     
     comp.calc_differences()
     comp.plotNormDiff(OUTPUT['normal_diff'])
