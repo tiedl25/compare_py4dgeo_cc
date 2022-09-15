@@ -4,8 +4,12 @@ import statistics
 import matplotlib.pyplot as plt  
 import matplotlib.ticker as ticker
 
+import file_handle as fhandle
 import vec_calc as vc
+
 from map_diff import Map_Diff
+from pathlib import Path
+
 
 class Compare:
     '''
@@ -108,8 +112,8 @@ class Compare:
             print('There is nothing to plot. You have to call calc_differences first.')
             return
 
-        map1 = Map_Diff(self.diffs['Distance'], self.re['pts'], "Difference in distance between CC and Py4dGeo")
-        map2 = Map_Diff(self.diffs['LODetection'], self.re['pts'], "Difference in lodetection between CC and Py4dGeo")
+        map1 = Map_Diff(self.diffs['Distance'], self.re['pts'], "Difference in distance between CC and Py4dGeo", point_size=10, cmap='jet')
+        map2 = Map_Diff(self.diffs['LODetection'], self.re['pts'], "Difference in lodetection between CC and Py4dGeo", point_size=10, cmap='jet')
 
         show = True if proj=='3d' else False
 
@@ -317,3 +321,34 @@ class Compare:
                 row.extend([self.aspects[i], self.slopes[i], self.nan_mode[i]])
                 
                 writer.writerow(row)
+
+    def writeCloud(self, path, cc_mode=True):
+        '''
+        Handle writing to different filetypes(ascii and las/laz), so theres no need to change the function when using a different file extension.
+
+        Parameters:
+            self (Py4d_M3C2): The object itself.
+            cc_mode (bool): Specifies if the header is written with CC vocabulary or py4dgeo vocabulary.
+        '''
+        extension = Path(path).suffix
+
+        if cc_mode: keys = ['M3C2__distance', 'distance__uncertainty', 'STD_cloud1', 'STD_cloud2', 'Npoints_cloud1', 'Npoints_cloud2', 'NormalX', 'NormalY', 'NormalZ']
+        else: keys = ['distance', 'lodetection', 'spread1', 'spread2', 'num_samples1', 'num_samples2', 'nx', 'ny', 'nz']
+
+        attributes={keys[0] : self.diffs['Distance'], 
+                    keys[1] : self.diffs["LODetection"]}
+
+        if 'Spread1' in self.diffs:
+            attributes.update({keys[2] : self.diffs["Spread1"], keys[3] : self.diffs["Spread2"],})
+        if 'NumSamples1' in self.diffs:
+            attributes.update({keys[4] : self.diffs["NumSamples1"], keys[5] : self.diffs["NumSamples2"]})
+
+        attributes.update({keys[6] : self.diffs['NX'], keys[7] : self.diffs['NY'], keys[8] : self.diffs['NZ']})
+
+        if extension in [".las", ".laz"]:
+            fhandle.write_las(self.re['pts'], path, attributes)
+        elif extension in [".xyz", ".txt"]:
+            fhandle.write_xyz(self.re['pts'], path, attributes)
+        else:
+            print("File extension has to be las, laz, xyz or txt")
+            return

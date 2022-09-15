@@ -94,7 +94,8 @@ if __name__ == '__main__':
             'distance_diff' : '/map_diff_distance', 
             'lod_diff' : '/map_diff_lodetection',
             'spread_diff' : '/hist_diff_spread',
-            'sample_diff' : '/hist_diff_sample'}
+            'sample_diff' : '/hist_diff_sample',
+            'cloud' : '/diff_cloud.laz'}
 
     for out in OUTPUT.items(): OUTPUT[out[0]] = OUTPUT_DIR + out[1] # add output directory to string
 
@@ -139,6 +140,7 @@ if __name__ == '__main__':
     comp.sampleDiff(re_num_samples, cl_num_samples, OUTPUT['sample_diff'], plot=True)
     comp.writeStatistics(OUTPUT['stats'])
     comp.writeDiff(OUTPUT['diffs'])
+    comp.writeCloud(OUTPUT['cloud'])
 
     # remove temporary files saved by CC
     if os.path.exists(PATH_CLOUD1[:-4] + '_M3C2__NORM_TO_SF.las'): os.remove(PATH_CLOUD1[:-4] + '_M3C2__NORM_TO_SF.las')

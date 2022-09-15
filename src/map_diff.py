@@ -13,7 +13,7 @@ class Map_Diff:
         size (int): The number of coordinates.
         unit (str): The unit used for the axes.
     '''
-    def __init__(self, mapped_vals, coords, title='', unit='m', point_size=1):
+    def __init__(self, mapped_vals, coords, title='', unit='m', point_size=1, cmap='YlGnBu'):
         '''
         The constructor of the Map_Diff class.
 
@@ -30,6 +30,7 @@ class Map_Diff:
         self.size = int(np.size(coords/3))
         self.unit = unit
         self.point_size = point_size
+        self.cmap=cmap
 
     def plot(self, crds, vals, ttl, ax, min, max, proj='2d'):
         '''
@@ -57,7 +58,7 @@ class Map_Diff:
             ax.set_aspect(aspect=1)
             
             #draw points
-            pts = ax.scatter(x,y,s=self.point_size, c=vals, cmap='YlGnBu', vmin=min, vmax=max)
+            pts = ax.scatter(x,y,s=self.point_size, c=vals, cmap=self.cmap, vmin=min, vmax=max)
         elif proj=='3d':
             ax.set_zlabel('Z Axis')
 
@@ -68,7 +69,7 @@ class Map_Diff:
             ax.set_box_aspect((np.ptp(x), np.ptp(y), np.ptp(z)))
 
             #draw points
-            pts = ax.scatter3D(x,y,z,s=self.point_size, c=vals, cmap='YlGnBu', vmin=min, vmax=max)
+            pts = ax.scatter3D(x,y,z,s=self.point_size, c=vals, cmap=self.cmap, vmin=min, vmax=max)
             ax.zaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f ' + self.unit))
 
         # set units for the x and y axes
@@ -134,12 +135,8 @@ class Map_Diff:
         max = np.nanmax(all_vals)
         min = np.nanmin(all_vals)
 
-        x=y=c=0
-        pts = ax[0].scatter(x,y,s=self.point_size, c=c, vmin=min, vmax=max, cmap='YlGnBu')
-        ax[0].clear()
-
         # create subplots
-        self.plot(self.coords, self.mapped_vals, self.title, ax[0], min, max, proj)
+        pts = self.plot(self.coords, self.mapped_vals, self.title, ax[0], min, max, proj)
         self.plot(crds[0], vals[0], ttls[0], ax[1], min, max, proj)
         self.plot(crds[1], vals[1], ttls[1], ax[2], min, max, proj)
         

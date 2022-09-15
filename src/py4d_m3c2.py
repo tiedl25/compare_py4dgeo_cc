@@ -2,6 +2,8 @@ import py4dgeo
 import file_handle as fhandle
 import numpy as np
 
+from pathlib import Path
+
 class Py4d_M3C2:
     '''
     A class for calculating distances between point clouds by implementing the m3c2-algorithm from the py4dgeo library. 
@@ -52,6 +54,8 @@ class Py4d_M3C2:
             self (Py4d_M3C2): The object itself.
             cc_mode (bool): Specifies if the header is written with CC vocabulary or py4dgeo vocabulary.
         '''
+        extension = Path(self.output_path).suffix
+        
         if cc_mode: keys = ['M3C2__distance', 'distance__uncertainty', 'STD_cloud1', 'STD_cloud2', 'Npoints_cloud1', 'Npoints_cloud2', 'NormalX', 'NormalY', 'NormalZ']
         else: keys = ['distance', 'lodetection', 'spread1', 'spread2', 'num_samples1', 'num_samples2', 'nx', 'ny', 'nz']
 
@@ -72,9 +76,9 @@ class Py4d_M3C2:
             attributes.pop(keys[4])
             attributes.pop(keys[5])
 
-        if self.output_path[-3:] == "las" or self.output_path[-3:] == "laz":
+        if extension in [".las", ".laz"]:
             fhandle.write_las(self.corepoints, self.output_path, attributes)
-        elif self.output_path[-3:] == "xyz" or self.output_path[-3:] == "txt":
+        elif extension in [".xyz", ".txt"]:
             fhandle.write_xyz(self.corepoints, self.output_path, attributes)
         else:
             print("File extension has to be las, laz, xyz or txt")
@@ -127,11 +131,10 @@ class Py4d_M3C2:
             self (Py4d_M3C2): The object itself.
             *path (str): The path to a point cloud file. Can also handle multiple files.
         '''
-        from pathlib import Path
         extension = Path(path[0]).suffix
-        if extension == (".las" or ".laz"):
+        if extension in [".las", ".laz"]:
             return py4dgeo.read_from_las(*path, other_epoch=other_epoch)
-        elif extension == (".xyz" or ".txt"):
+        elif extension in [".xyz", ".txt"]:
             return py4dgeo.read_from_xyz(*path, other_epoch=other_epoch, comments="//", **parse_opts)
         else:
             print("File extension has to be las, laz, xyz or txt")
