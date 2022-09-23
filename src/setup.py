@@ -1,3 +1,4 @@
+from cmath import nan
 import sys
 import os
 import platform
@@ -43,7 +44,7 @@ def checkParams(test):
         out_dir = args.output_dir[0] if args.output_dir else 'output' # default output directory if not specified
         return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot, args.skip, args.repeat
 
-    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False, False, False
+    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output2', 'm3c2_params.txt', '2d', False, False, False
 
 def reorder(cloud):
     '''
@@ -58,9 +59,16 @@ def reorder(cloud):
             - numpy.ndarray -- The spread information. 
             - numpy.ndarray -- The num_sample information.
     '''
-
-    cl_normals = np.array([cloud[1]['NormalX'], cloud[1]['NormalY'], cloud[1]['NormalZ']])
-    cl_normals = np.transpose(cl_normals)
+    try:
+        cl_normals = np.array([cloud[1]['NormalX'], cloud[1]['NormalY'], cloud[1]['NormalZ']])
+        cl_normals = np.transpose(cl_normals)
+    except:
+        print('No normal information available')
+        li = []
+        for i in range(0, np.size(cloud[0])):
+            li.append(nan)
+        cl_normals = np.array([li,li,li])
+        cl_normals = np.transpose(cl_normals)   
 
     if 'STD_cloud1' in cloud[1]:
         cl_spread = (cloud[1]['STD_cloud1'], cloud[1]['STD_cloud2'])

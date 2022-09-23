@@ -64,10 +64,12 @@ class Py4d_M3C2:
                     keys[2] : self.uncertainties["spread1"], 
                     keys[3] : self.uncertainties["spread2"],
                     keys[4] : self.uncertainties["num_samples1"],
-                    keys[5] : self.uncertainties["num_samples2"],
-                    keys[6] : self.normals[0:,0], 
-                    keys[7] : self.normals[0:,1], 
-                    keys[8] : self.normals[0:,2]}
+                    keys[5] : self.uncertainties["num_samples2"]}
+
+        if self.mode != 'vertical':
+            attributes.update({keys[6] : self.normals[0:,0], 
+                                keys[7] : self.normals[0:,1], 
+                                keys[8] : self.normals[0:,2]})
 
         if not self.exp_spread: 
             attributes.pop(keys[2])
@@ -120,8 +122,13 @@ class Py4d_M3C2:
         if dc['ExportDensityAtProjScale'] == 'true': self.exp_samples = True
         if dc['ExportStdDevInfo'] == 'true': self.exp_spread = True
 
-        # Multi-Scale Mode
-        if dc['NormalMode'] == '2': self.params['normal_radii'] = (float(dc['NormalMinScale'])/2, float(dc['NormalStep'])/2, float(dc['NormalMaxScale'])/2)
+        # Normal Mode
+        if dc['NormalMode'] == '0': self.mode = 'default'
+        elif dc['NormalMode'] == '2': 
+            self.mode = 'multiscale'
+            self.params['normal_radii'] = (float(dc['NormalMinScale'])/2, float(dc['NormalStep'])/2, float(dc['NormalMaxScale'])/2)
+        elif dc['NormalMode'] == '3': self.mode = 'vertical'
+        elif dc['NormalMode'] == '4': self.mode = 'horizontal'
 
     def read(self, *path, other_epoch=None, **parse_opts):
         '''
@@ -150,12 +157,23 @@ class Py4d_M3C2:
         Returns: 
             dict: The calculated m3c2 distances.
         '''
-        m3c2 = py4dgeo.M3C2(
-            epochs=(self.epoch1, self.epoch2),
-            corepoints=self.corepoints,
-            **self.params
-        )
+        if self.mode == 'vertical':
+            m3c2 = Vertical_M3C2(
+                epochs=(self.epoch1, self.epoch2),
+                corepoints=self.corepoints,
+                **self.params
+            )
+        else:
+            m3c2 = py4dgeo.M3C2(
+                epochs=(self.epoch1, self.epoch2),
+                corepoints=self.corepoints,
+                **self.params
+            )
         self.distances, self.uncertainties = m3c2.run() 
         self.normals = m3c2.corepoint_normals
         if self.output_path: self.write()
         return self.distances
+
+class Vertical_M3C2(py4dgeo.M3C2):
+    def directions(self):
+        return np.array([0,0,1])
