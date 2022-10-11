@@ -80,7 +80,7 @@ class Py4d_M3C2:
 
         if extension in [".las", ".laz"]:
             fhandle.write_las(self.corepoints, self.output_path, attributes)
-        elif extension in [".xyz", ".txt"]:
+        elif extension in [".xyz", ".txt", ".asc"]:
             fhandle.write_xyz(self.corepoints, self.output_path, attributes)
         else:
             print("File extension has to be las, laz, xyz or txt")
@@ -141,7 +141,7 @@ class Py4d_M3C2:
         extension = Path(path[0]).suffix
         if extension in [".las", ".laz"]:
             return py4dgeo.read_from_las(*path, other_epoch=other_epoch)
-        elif extension in [".xyz", ".txt"]:
+        elif extension in [".xyz", ".txt", ".asc"]:
             return py4dgeo.read_from_xyz(*path, other_epoch=other_epoch, comments="//", **parse_opts)
         else:
             print("File extension has to be las, laz, xyz or txt")
@@ -177,3 +177,7 @@ class Py4d_M3C2:
 class Vertical_M3C2(py4dgeo.M3C2):
     def directions(self):
         return np.array([0,0,1])
+
+if __name__ == '__main__':
+    py4d = Py4d_M3C2('../beach_kijkduin/tmp/kijkduin_170131_130111_aoi.txt', '../beach_kijkduin/tmp/kijkduin_170117_130042_aoi.txt', '../beach_kijkduin/kijkduin_aoi_corepts.xyz', 'output.txt', '../beach_kijkduin/m3c2_params.txt')
+    py4d.run()

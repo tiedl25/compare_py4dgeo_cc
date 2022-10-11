@@ -1,7 +1,7 @@
 import numpy as np
 import laspy
 
-def read_las(pointcloudfile,get_attributes=False,useevery=1):
+def read_las(pointcloudfile, get_attributes=False, useevery=1):
     '''
     Read a pointcloud from a las/laz file.
 
@@ -74,9 +74,32 @@ def write_las(points, path, attributes={}):
 
     las.write(path)
 
-def read_xyz():
-    '''Read a pointcloud from a las/laz file.'''
-    pass
+def read_xyz(pointcloudfile, get_attributes=False):
+    '''Read a pointcloud from an ascii file.'''
+    dc = {}
+    with open(pointcloudfile, mode='r') as file:
+        lines = file.readlines()
+        for line in lines: 
+            line = line.split()
+            if line[0][:2] == '//':
+                line[0] = line[0][2:]
+                for s in line:
+                    dc.update({s : []})
+            else:
+                for s in zip(dc, line):
+                    dc[s[0]].append(float(s[1]))
+
+        coords = np.array([dc.pop('X'), dc.pop('Y'), dc.pop('Z')]).transpose()
+
+        if 'Nx' in dc: dc.update({'NormalX' : dc.pop('Nx')})
+        if 'Ny' in dc: dc.update({'NormalY' : dc.pop('Ny')})
+        if 'Nz' in dc: dc.update({'NormalZ' : dc.pop('Nz')})
+
+        for i in dc:
+            dc[i] = np.array(dc[i])
+            
+    if not get_attributes: return(coords)
+    return(coords, dc)
 
 def write_xyz(points, path, attributes={}):
     '''

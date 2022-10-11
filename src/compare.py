@@ -348,7 +348,7 @@ class Compare:
 
         if extension in [".las", ".laz"]:
             fhandle.write_las(self.re['pts'], path, attributes)
-        elif extension in [".xyz", ".txt"]:
+        elif extension in [".xyz", ".txt", ".asc"]:
             fhandle.write_xyz(self.re['pts'], path, attributes)
         else:
             print("File extension has to be las, laz, xyz or txt")
