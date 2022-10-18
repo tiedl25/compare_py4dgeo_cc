@@ -97,7 +97,7 @@ class Compare:
 
         return self.diffs
 
-    def mapDiff(self, path1, path2, proj='2d', advanced=False):
+    def mapDiff(self, path1, path2, proj='2d', advanced=False, ps=10):
         '''
         Handle the plots of distance and lodetection. Decide if the plots are single-plotted or the distance/lodetection plots from CC and Py4dGeo are also shown.
 
@@ -107,13 +107,14 @@ class Compare:
             path2 (str): The output path for the lodetection plot.
             proj (str): Specifies whether the plot is plotted in 2d or 3d.
             advanced (bool): Specifies whether the differences gets plotted in comparison to the CC and Py4dGeo Distances/LODetection or just alone.
+            ps (int): Sets the point size.
         '''
         if not self.calc: 
             print('There is nothing to plot. You have to call calc_differences first.')
             return
 
-        map1 = Map_Diff(self.diffs['Distance'], self.re['pts'], "Difference in distance between CC and Py4dGeo", point_size=10, cmap='jet')
-        map2 = Map_Diff(self.diffs['LODetection'], self.re['pts'], "Difference in lodetection between CC and Py4dGeo", point_size=10, cmap='jet')
+        map1 = Map_Diff(self.diffs['Distance'], self.re['pts'], "Difference in distance between CC and Py4dGeo", point_size=ps, cmap='jet')
+        map2 = Map_Diff(self.diffs['LODetection'], self.re['pts'], "Difference in lodetection between CC and Py4dGeo", point_size=ps, cmap='jet')
 
         show = True if proj=='3d' else False
 
@@ -150,6 +151,33 @@ class Compare:
         ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
 
         plt.scatter(self.aspects, self.slopes, s=2, c='b')
+        plt.savefig(path)
+        plt.close()
+
+    def plotNormHist(self, path):
+        '''
+        Plot the normal differences between both point clouds in a histogram.
+
+        Parameters:
+            self (Compare): The object itself.
+            path (str): The output path for the normal plot.
+        '''
+        if not self.calc: 
+            print('There is nothing to plot. You have to call calc_differences first.')
+            return
+
+        fig, ax = plt.subplots(1,2)
+        plt.subplot(1,2,1)
+        plt.title('Aspect')
+        ax[0].hist(self.aspects)
+        ax[0].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
+
+        plt.subplot(1,2,2)
+        plt.title('Slope')
+        ax[1].hist(self.slopes)
+
+        ax[1].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
+
         plt.savefig(path)
         plt.close()
 

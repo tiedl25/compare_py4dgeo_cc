@@ -1,3 +1,4 @@
+import statistics
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
@@ -91,7 +92,7 @@ class Map_Diff:
         fig = plt.figure(figsize=(10,10))
         ax = plt.axes(projection = None if proj=='2d' else proj)
 
-        #get max distances
+        #set range for colorbar
         max = np.nanmax(self.mapped_vals)
         min = np.nanmin(self.mapped_vals)
 
@@ -132,8 +133,12 @@ class Map_Diff:
         all_vals = np.append(all_vals, vals[0])
         all_vals = np.append(all_vals, vals[1])
 
-        max = np.nanmax(all_vals)
-        min = np.nanmin(all_vals)
+        # set range for colorbar
+        li = [x for x in all_vals if np.isnan(x) == False]
+        p = [x for x in li if x > 0]
+        n = [x for x in li if x < 0]
+        max = np.nanmax(all_vals) if len(p) < 2 else statistics.stdev(p)
+        min = np.nanmin(all_vals) if len(n) < 2 else -statistics.stdev(n)
 
         # create subplots
         pts = self.plot(self.coords, self.mapped_vals, self.title, ax[0], min, max, proj)
@@ -142,10 +147,11 @@ class Map_Diff:
         
         #set color bar with individual ticks and labels
         cbar = plt.colorbar(pts, ax=ax, orientation='horizontal', format=('%.3f ' + self.unit))       
-
+        
         if proj=='2d': 
             for a in ax: plt.setp(a.get_xticklabels(), rotation=30, horizontalalignment='right') #rotate x-ticklabels to prevent overlapping
-
+        
         if show: plt.show()
         if output: fig.savefig(output)
+
         plt.close()

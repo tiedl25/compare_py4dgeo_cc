@@ -35,7 +35,8 @@ def checkParams(test):
         parser.add_argument('-c', '--corepoints', dest='corepoints', type=argparse.FileType('r'), help='Path to the corepoints file', nargs=1)
         parser.add_argument('-2', '--plot_2d', dest='plot_2d', action='store_true', help='Plot differences in lodetection/distances in 2d instead of 3d')
         parser.add_argument('-a', '--advanced_dist_plot', dest='advanced_dist_plot', action='store_true', help='Plot differences in lodetection/distances in advanced mode for better comparability')
-        parser.add_argument('-s', '--skip', dest='skip', action='store_true', help='Skip the calculations in Py4dGeo and CloudCompare if the data already exists')
+        parser.add_argument('-p', '--point_size', dest='point_size', type=int, help='Set the point size for the plots.', nargs=1)
+        parser.add_argument('-s', '--skip', dest='skip', action='store_true', help='Skip the calculations in Py4dGeo and CloudCompare if the data already exists. Therefore you have to provide the calculated clouds as cloud1/2 parameter.')
         parser.add_argument('-r', '--repeat', dest='repeat', action='store_true', help='Repeat the comparing and plotting if the data already exists')
         parser.add_argument('-f', '--file_format', dest='file_format', type=str, help='Specify the output format for CloudCompare and Py4dgeo (las/laz, xyz/txt/asc)', nargs=1)
 
@@ -43,10 +44,11 @@ def checkParams(test):
 
         crpts = args.corepoints[0].name if args.corepoints else False
         out_dir = args.output_dir[0] if args.output_dir else 'output' # default output directory if not specified
-        file_format = args.file_format[0] if args.file_format else 'laz' # default output directory if not specified
-        return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot, file_format, args.skip, args.repeat
+        file_format = args.file_format[0] if args.file_format else 'laz' # default file format if not specified
+        point_size = args.point_size[0] if args.point_size else 10 # default point size if not specified
+        return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot, point_size, file_format, args.skip, args.repeat
 
-    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output2', 'm3c2_params.txt', '2d', False, 'laz', False, False
+    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output2', 'm3c2_params.txt', '2d', False, 10, 'laz', False, False
 
 def reorder(cloud):
     '''
@@ -67,7 +69,7 @@ def reorder(cloud):
     except:
         print('No normal information available')
         li = []
-        for i in range(0, np.size(cloud[0])):
+        for i in range(0, int(np.size(cloud[0])/3)):
             li.append(nan)
         cl_normals = np.array([li,li,li])
         cl_normals = np.transpose(cl_normals)   
@@ -88,7 +90,7 @@ if __name__ == '__main__':
     test = True # for debugging and developing use default parameters
     if len(sys.argv) > 1: test = False
 
-    PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED, FILE_FORMAT, skip, repeat= checkParams(test)  
+    PATH_CLOUD1, PATH_CLOUD2, PATH_COREPTS, OUTPUT_DIR, PARAMS, PROJECTION, ADVANCED, POINT_SIZE, FILE_FORMAT, skip, repeat= checkParams(test)  
     if platform.system() == 'Windows': CC_BIN = 'C:/Programme/CloudCompare/CloudCompare' #default installation directory
     elif platform.system() == 'Linux': CC_BIN = os.popen('which cloudcompare').read()
 
@@ -101,6 +103,7 @@ if __name__ == '__main__':
             'diffs' : '/m3c2_eval_diffs.csv', 
             'stats' : '/m3c2_eval_stats.csv', 
             'normal_diff' : '/plot_normals_dev', 
+            'normal_hist' : '/plot_normals_hist',
             'distance_diff' : '/map_diff_distance', 
             'lod_diff' : '/map_diff_lodetection',
             'spread_diff' : '/hist_diff_spread',
@@ -166,13 +169,10 @@ if __name__ == '__main__':
     
     comp.calc_differences()
     comp.plotNormDiff(OUTPUT['normal_diff'])
-    comp.mapDiff(OUTPUT['distance_diff'], OUTPUT['lod_diff'], PROJECTION, ADVANCED)
+    comp.plotNormHist(OUTPUT['normal_hist'])
+    comp.mapDiff(OUTPUT['distance_diff'], OUTPUT['lod_diff'], PROJECTION, ADVANCED, POINT_SIZE)
     comp.spreadDiff(re_spread, cl_spread, OUTPUT['spread_diff'], plot=True)
     comp.sampleDiff(re_num_samples, cl_num_samples, OUTPUT['sample_diff'], plot=True)
     comp.writeStatistics(OUTPUT['stats'])
-    #comp.writeDiff(OUTPUT['diffs'])
+    comp.writeDiff(OUTPUT['diffs'])
     comp.writeCloud(OUTPUT['cloud'])
-
-    # remove temporary files saved by CC
-    if os.path.exists(PATH_CLOUD1[:-4] + '_M3C2__NORM_TO_SF.las'): os.remove(PATH_CLOUD1[:-4] + '_M3C2__NORM_TO_SF.las')
-    if os.path.exists(PATH_CLOUD1[:-4] + '_M3C2.las'): os.remove(PATH_CLOUD1[:-4] + '_M3C2.las')
