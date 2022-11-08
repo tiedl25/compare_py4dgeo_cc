@@ -48,7 +48,7 @@ def checkParams(test):
         point_size = args.point_size[0] if args.point_size else 10 # default point size if not specified
         return args.cloud1.name, args.cloud2.name, crpts, out_dir, args.param_file.name, '2d' if args.plot_2d else '3d', args.advanced_dist_plot, point_size, file_format, args.skip, args.repeat
 
-    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output2', 'm3c2_params.txt', '2d', False, 10, 'laz', False, False
+    else: return 'data/test1.xyz', 'data/test2.xyz', False, 'output', 'm3c2_params.txt', '2d', False, 10, 'laz', False, False
 
 def reorder(cloud):
     '''
@@ -167,7 +167,7 @@ if __name__ == '__main__':
                     cloud[1]['M3C2__distance'], 
                     cloud[1]['distance__uncertainty'])
     
-    comp.calc_differences()
+    comp.calculate_differences()
     comp.plotNormDiff(OUTPUT['normal_diff'])
     comp.plotNormHist(OUTPUT['normal_hist'])
     comp.mapDiff(OUTPUT['distance_diff'], OUTPUT['lod_diff'], PROJECTION, ADVANCED, POINT_SIZE)

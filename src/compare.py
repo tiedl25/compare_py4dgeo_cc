@@ -54,7 +54,7 @@ class Compare:
         self.slopes = np.empty(self.size, dtype=object)
         self.aspects = np.empty(self.size, dtype=object)
 
-    def calc_differences(self):
+    def calculate_differences(self):
         '''
         Calculate all the differences between related arguments of this class
 
