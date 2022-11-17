@@ -81,7 +81,7 @@
 <span class="sd">        params (str/dict): Either the path to a CC params file or a dictionary of params</span>
 <span class="sd">        corepoints: Either the pointcloud from a separate corepoint file or a subsampled version of the first point cloud.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">corepoint_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compr</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">,</span> <span class="n">corepoint_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cc_normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compr</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        The class constructor.</span>
 
@@ -92,12 +92,15 @@
 <span class="sd">            corepoint_path (str/bool): The path to a corepoint file. If not provided, the first point cloud is used instead.</span>
 <span class="sd">            output_path (str/bool): The name and path for the output file. If not provided, the output won&#39;t be saved.</span>
 <span class="sd">            params (dict/str/bool): Either the path to a CC params file or a dictionary featuring the keys: &#39;cyl_radii&#39;, normal_radii&#39;, &#39;max_distance&#39; and &#39;registration_error&#39;. If not provided default parameters are set.</span>
+<span class="sd">            cc_normals (str): Optional path to a computed CC file.</span>
 <span class="sd">            compr (int): A compression rate for the corepoints if no corepoint file is given. That means only every n-th point is used. Default value is 1, so no compression at all.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">epoch1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path1</span><span class="p">,</span> <span class="n">path2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_cc_normals</span><span class="p">(</span><span class="n">cc_normals</span><span class="p">)</span> <span class="k">if</span> <span class="n">cc_normals</span> <span class="o">!=</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">corepoint_path</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corepoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">corepoint_path</span><span class="p">)</span><span class="o">.</span><span class="n">cloud</span>
         <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corepoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch1</span><span class="o">.</span><span class="n">cloud</span><span class="p">[::</span><span class="n">compr</span><span class="p">]</span>
@@ -194,6 +197,29 @@
         <span class="k">elif</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;NormalMode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span>
         <span class="k">elif</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;NormalMode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span></div>
 
+<div class="viewcode-block" id="Py4d_M3C2.read_cc_normals"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.read_cc_normals">[docs]</a>    <span class="k">def</span> <span class="nf">read_cc_normals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Read CloudCompare normals from a given file</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            self (Py4d_M3C2): The object itself.</span>
+<span class="sd">            path (str): Path to a computed CloudCompare file.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.array: Contains the normals.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">extension</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.las&quot;</span><span class="p">,</span> <span class="s2">&quot;.laz&quot;</span><span class="p">]:</span>
+            <span class="n">coords</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">normals</span> <span class="o">=</span>  <span class="n">fhandle</span><span class="o">.</span><span class="n">read_las</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">get_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">extension</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;.asc&quot;</span><span class="p">]:</span>
+            <span class="n">coords</span><span class="p">,</span> <span class="n">dc</span> <span class="o">=</span>  <span class="n">fhandle</span><span class="o">.</span><span class="n">read_xyz</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">get_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">dc</span><span class="p">[</span><span class="s1">&#39;NormalX&#39;</span><span class="p">],</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;NormalY&#39;</span><span class="p">],</span> <span class="n">dc</span><span class="p">[</span><span class="s1">&#39;NormalZ&#39;</span><span class="p">]])</span>
+            <span class="n">normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">normals</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File extension has to be las, laz, xyz or txt&quot;</span><span class="p">)</span>
+            <span class="n">quit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">normals</span></div>
+
 <div class="viewcode-block" id="Py4d_M3C2.read"><a class="viewcode-back" href="../../src.html#src.py4d_m3c2.Py4d_M3C2.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="n">other_epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">parse_opts</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.</span>
@@ -225,12 +251,14 @@
             <span class="n">m3c2</span> <span class="o">=</span> <span class="n">Vertical_M3C2</span><span class="p">(</span>
                 <span class="n">epochs</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch2</span><span class="p">),</span>
                 <span class="n">corepoints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">corepoints</span><span class="p">,</span>
+                <span class="n">corepoint_normals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normals</span><span class="p">,</span>
                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">m3c2</span> <span class="o">=</span> <span class="n">py4dgeo</span><span class="o">.</span><span class="n">M3C2</span><span class="p">(</span>
                 <span class="n">epochs</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epoch2</span><span class="p">),</span>
                 <span class="n">corepoints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">corepoints</span><span class="p">,</span>
+                <span class="n">corepoint_normals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normals</span><span class="p">,</span>
                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uncertainties</span> <span class="o">=</span> <span class="n">m3c2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> 

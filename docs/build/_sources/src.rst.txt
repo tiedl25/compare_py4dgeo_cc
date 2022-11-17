@@ -20,6 +20,14 @@ src.file\_handle module
    :undoc-members:
    :show-inheritance:
 
+src.main module
+---------------
+
+.. automodule:: src.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 src.map\_diff module
 --------------------
 
@@ -32,14 +40,6 @@ src.py4d\_m3c2 module
 ---------------------
 
 .. automodule:: src.py4d_m3c2
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-src.setup module
-----------------
-
-.. automodule:: src.setup
    :members:
    :undoc-members:
    :show-inheritance:
