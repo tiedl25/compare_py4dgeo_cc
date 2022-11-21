@@ -17,7 +17,7 @@ class Py4d_M3C2:
         params (str/dict): Either the path to a CC params file or a dictionary of params
         corepoints: Either the pointcloud from a separate corepoint file or a subsampled version of the first point cloud.
     '''
-    def __init__(self, path1, path2, corepoint_path=False, output_path=False, params=False, compr=1):
+    def __init__(self, path1, path2, corepoint_path=False, output_path=False, params=False, cc_normals=None, compr=1):
         '''
         The class constructor.
 
@@ -28,12 +28,15 @@ class Py4d_M3C2:
             corepoint_path (str/bool): The path to a corepoint file. If not provided, the first point cloud is used instead.
             output_path (str/bool): The name and path for the output file. If not provided, the output won't be saved.
             params (dict/str/bool): Either the path to a CC params file or a dictionary featuring the keys: 'cyl_radii', normal_radii', 'max_distance' and 'registration_error'. If not provided default parameters are set.
+            cc_normals (str): Optional path to a computed CC file.
             compr (int): A compression rate for the corepoints if no corepoint file is given. That means only every n-th point is used. Default value is 1, so no compression at all.
         '''
         self.output_path = output_path
         self.params = params
 
         self.epoch1, self.epoch2 = self.read(path1, path2)
+
+        self.normals = self.read_cc_normals(cc_normals) if cc_normals != None else None
 
         if corepoint_path: self.corepoints = self.read(corepoint_path).cloud
         else: self.corepoints = self.epoch1.cloud[::compr]
@@ -130,6 +133,29 @@ class Py4d_M3C2:
         elif dc['NormalMode'] == '3': self.mode = 'vertical'
         elif dc['NormalMode'] == '4': self.mode = 'horizontal'
 
+    def read_cc_normals(self, path):
+        '''
+        Read CloudCompare normals from a given file
+        
+        Parameters:
+            self (Py4d_M3C2): The object itself.
+            path (str): Path to a computed CloudCompare file.
+        
+        Returns:
+            numpy.array: Contains the normals.
+        '''
+        extension = Path(path).suffix
+        if extension in [".las", ".laz"]:
+            coords, attributes, normals =  fhandle.read_las(path, get_attributes=True)
+        elif extension in [".xyz", ".txt", ".asc"]:
+            coords, dc =  fhandle.read_xyz(path, get_attributes=True)
+            normals = np.array([dc['NormalX'], dc['NormalY'], dc['NormalZ']])
+            normals = np.transpose(normals)
+        else:
+            print("File extension has to be las, laz, xyz or txt")
+            quit()
+        return normals
+
     def read(self, *path, other_epoch=None, **parse_opts):
         '''
         Handle reading epochs from different file types(ascii and las/laz), so theres no need to change the function when using a different file extension.
@@ -161,12 +187,14 @@ class Py4d_M3C2:
             m3c2 = Vertical_M3C2(
                 epochs=(self.epoch1, self.epoch2),
                 corepoints=self.corepoints,
+                corepoint_normals=self.normals,
                 **self.params
             )
         else:
             m3c2 = py4dgeo.M3C2(
                 epochs=(self.epoch1, self.epoch2),
                 corepoints=self.corepoints,
+                corepoint_normals=self.normals,
                 **self.params
             )
         self.distances, self.uncertainties = m3c2.run() 
@@ -177,7 +205,3 @@ class Py4d_M3C2:
 class Vertical_M3C2(py4dgeo.M3C2):
     def directions(self):
         return np.array([0,0,1])
-
-if __name__ == '__main__':
-    py4d = Py4d_M3C2('../beach_kijkduin/tmp/kijkduin_170131_130111_aoi.txt', '../beach_kijkduin/tmp/kijkduin_170117_130042_aoi.txt', '../beach_kijkduin/kijkduin_aoi_corepts.xyz', 'output.txt', '../beach_kijkduin/m3c2_params.txt')
-    py4d.run()
