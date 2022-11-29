@@ -1,6 +1,5 @@
 import numpy as np
 import csv
-import statistics
 import matplotlib.pyplot as plt  
 import matplotlib.ticker as ticker
 
@@ -166,20 +165,23 @@ class Compare:
             print('There is nothing to plot. You have to call calc_differences first.')
             return
 
-        fig, ax = plt.subplots(1,2)
-        plt.subplot(1,2,1)
-        plt.title('Aspect')
-        ax[0].hist(self.aspects)
-        ax[0].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
+        try:
+            fig, ax = plt.subplots(1,2)
+            plt.subplot(1,2,1)
+            plt.title('Aspect')
+            ax[0].hist(self.aspects)
+            ax[0].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
 
-        plt.subplot(1,2,2)
-        plt.title('Slope')
-        ax[1].hist(self.slopes)
+            plt.subplot(1,2,2)
+            plt.title('Slope')
+            ax[1].hist(self.slopes)
 
-        ax[1].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
+            ax[1].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.0f' + '°'))
 
-        plt.savefig(path)
-        plt.close()
+            plt.savefig(path)
+            plt.close()
+        except:
+            print('No normals to plot')
 
     def spreadDiff(self, re_spread, cl_spread, path, plot=False):
         '''
@@ -200,22 +202,24 @@ class Compare:
 
             titles = ('Spread1', 'Spread2')
 
-            plt.xlabel('Difference')
-            plt.ylabel('Number of points')
+            fig, ax = plt.subplots(1,2)
 
-            plt.subplot(1,2,1)
+            fig.supxlabel('Difference')
+            fig.supylabel('Number of points')
+
             li = [x for x in self.diffs['Spread1'] if np.isnan(x) == False]
-            plt.hist(li, bins=50)
-            plt.title(titles[0])
+            ax[0].hist(li, bins=50)
+            ax[0].title.set_text(titles[0])
             # set units for the x and y axes
-            plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
+            ax[0].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
 
-            plt.subplot(1,2,2)
             li = [x for x in self.diffs['Spread2'] if np.isnan(x) == False]
-            plt.hist(li, bins=50)
-            plt.title(titles[1])
+            ax[1].hist(li, bins=50)
+            ax[1].title.set_text(titles[1])
             # set units for the x and y axes
-            plt.gca().xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
+            ax[1].xaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f m'))
+
+            fig.tight_layout()
 
             plt.savefig(path)
             plt.close()
@@ -239,18 +243,22 @@ class Compare:
 
             titles = ('num_samples1', 'num_samples2')
 
-            plt.xlabel('Difference')
-            plt.ylabel('Number of points')
+            fig, ax = plt.subplots(1,2)
 
-            plt.subplot(1,2,1)
+            fig.supxlabel('Difference')
+            fig.supylabel('Number of points')
+
+            #plt.subplot(1,2,1)
             li = [x for x in self.diffs['NumSamples1'] if np.isnan(x) == False]
-            plt.hist(li, bins=50)
-            plt.title(titles[0])
+            ax[0].hist(li, bins=50)
+            ax[0].title.set_text(titles[0])
 
-            plt.subplot(1,2,2)
+            #plt.subplot(1,2,2)
             li = [x for x in self.diffs['NumSamples2'] if np.isnan(x) == False]
-            plt.hist(li, bins=50)
-            plt.title(titles[1])
+            ax[1].hist(li, bins=50)
+            ax[1].title.set_text(titles[1])
+
+            fig.tight_layout()
 
             plt.savefig(path)
             plt.close()      
@@ -282,9 +290,9 @@ class Compare:
             elif i==s-1: li = [x for x in self.slopes if np.isnan(x) == False]
 
             if np.size(li) > 1:
-                mean[i] = statistics.mean(li)
-                median[i] = statistics.median(li)
-                std_dev[i] = statistics.stdev(li)
+                mean[i] = np.nanmean(li)
+                median[i] = np.nanmedian(li)
+                std_dev[i] = np.nanstd(li)
             else:
                 mean[i] = None
                 median[i] = None

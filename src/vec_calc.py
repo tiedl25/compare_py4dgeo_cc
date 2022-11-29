@@ -46,11 +46,8 @@ def rotate(v1, v2, norm, angl):
 
     mat = (r1,r2,r3)
 
-    tmp = np.array(np.matmul(v2, mat), dtype=np.float16)
-    print(tmp.dtype)
-    print(tmp)
-
-    return np.matmul(v1, mat), np.matmul(v2, mat, dtype=np.longdouble)
+    #round the result of the matrix multiplication to avoid numerical inaccuracies
+    return np.round(np.matmul(v1, mat), 14), np.round(np.matmul(v2, mat), 14)
 
 def transform(v1, v2):
     '''
@@ -65,13 +62,10 @@ def transform(v1, v2):
     '''
     # create normal vector of v1 and z-unitvector
     n = np.cross(v1, (0,0,1))
-    print(n)
     n1,n2,n3 = n
     n = n / np.sqrt(n1*n1 + n2*n2 + n3*n3) # normalize normal vector
-    print(n)
 
     a = getAngle((0,0,1),v1)
-    print(a)
 
     r1,r2 = rotate(v1,v2,n,-np.radians(a))
 
@@ -128,13 +122,3 @@ def getSlope(normal):
             c=90.0-c
 
         return c
-
-
-
-if __name__ == '__main__':
-    normalized_vector = transform((1,2,3), (1,2,3))
-    #normalized_vector = np.transpose([0, 0,3.74165739])
-    slope = getSlope(normalized_vector)
-    aspect = getAspect(normalized_vector)
-
-    print(f'Normalized Vector: {normalized_vector}\nSlope: {slope}\nAspect: {aspect}')

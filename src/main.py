@@ -186,7 +186,7 @@ if __name__ == '__main__':
                     cloud[1]['distance__uncertainty'])
     
     #calculate differences
-    compare.calc_diff()
+    compare.calculate_differences()
 
     #different plots
     compare.plotNormDiff(OUTPUT['normal_diff'])
