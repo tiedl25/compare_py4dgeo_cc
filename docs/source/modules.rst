@@ -1,4 +1,4 @@
-Compare_Py4dGeo_CC
+compare_py4dgeo_cc
 ==================
 
 .. toctree::
